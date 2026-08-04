@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Discipleship Operating System — Client Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#2563FF;
+  --navy:#1E3A8A;
+  --ink:#0B1026;
+  --mist:#E6EEFF;
+  --white:#FFFFFF;
+  --line:rgba(11,16,38,.10);
+  --line-soft:rgba(11,16,38,.06);
+  --muted:rgba(11,16,38,.55);
+  --muted-2:rgba(11,16,38,.38);
+  --flag:#B45309;
+  --flag-bg:#FDF3E3;
+  --good:#0F766E;
+  --good-bg:#E4F4F1;
+  --shadow-sm:0 1px 2px rgba(11,16,38,.06), 0 2px 6px rgba(11,16,38,.05);
+  --shadow-md:0 4px 14px rgba(11,16,38,.08), 0 1px 3px rgba(11,16,38,.06);
+  --shadow-lg:0 18px 48px rgba(11,16,38,.18);
+  --r-sm:8px; --r:14px; --r-lg:20px;
+  --accent:#2563FF;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  background:#F5F7FC;color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  font-size:14px;line-height:1.5;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+.eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted-2)}
+
+/* ---------- Demo chrome ---------- */
+.demobar{
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  padding:10px 20px;background:var(--ink);color:#fff;
+}
+.demobar .brandmark{display:flex;align-items:center;gap:9px;font-weight:600;font-size:13px;letter-spacing:.01em}
+.brandmark .dot{width:9px;height:9px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 4px rgba(37,99,255,.25)}
+.demobar .tag{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:600}
+.demobar .spacer{flex:1}
+.seg{display:flex;background:rgba(255,255,255,.09);border-radius:999px;padding:3px}
+.seg button{padding:6px 14px;border-radius:999px;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.68)}
+.seg button[aria-selected="true"]{background:#fff;color:var(--ink);font-weight:600}
+.picker{display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,.6)}
+.picker select{
+  font-family:inherit;font-size:12.5px;font-weight:500;color:#fff;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;padding:6px 10px;appearance:none;cursor:pointer;
+}
+.picker select option{color:#111;background:#fff}
+.ghostbtn{font-size:12.5px;font-weight:500;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.18);padding:6px 12px;border-radius:8px}
+.ghostbtn:hover{background:rgba(255,255,255,.08);color:#fff}
+
+/* ---------- App shell ---------- */
+.shell{display:flex;min-height:calc(100vh - 52px)}
+.sidebar{
+  width:236px;flex:none;background:var(--ink);color:#fff;
+  padding:22px 14px;display:flex;flex-direction:column;gap:4px;
+}
+.church{display:flex;align-items:center;gap:11px;padding:0 8px 20px}
+.church .crest{
+  width:38px;height:38px;border-radius:11px;flex:none;
+  display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;
+  background:var(--accent);
+}
+.church .n{font-weight:600;font-size:13.5px;line-height:1.25}
+.church .s{font-size:11px;color:rgba(255,255,255,.42)}
+.navlbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);font-weight:600;padding:14px 10px 6px}
+.nav{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:10px;font-size:13.5px;color:rgba(255,255,255,.66);width:100%;text-align:left;font-weight:400}
+.nav:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav[aria-current="true"]{background:rgba(255,255,255,.10);color:#fff;font-weight:600}
+.nav .ic{width:17px;height:17px;flex:none;opacity:.9}
+.nav .cnt{margin-left:auto;font-size:11px;font-weight:600;background:var(--accent);color:#fff;padding:1px 7px;border-radius:999px}
+.sidefoot{margin-top:auto;padding:14px 10px 0;border-top:1px solid rgba(255,255,255,.09);font-size:11.5px;color:rgba(255,255,255,.4)}
+
+.main{flex:1;min-width:0;background:#F5F7FC}
+.topline{
+  display:flex;align-items:center;gap:16px;padding:20px 30px 0;
+}
+.topline h1{font-size:23px;font-weight:600;letter-spacing:-.02em;margin:0}
+.topline .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.topline .spacer{flex:1}
+.btn{background:var(--accent);color:#fff;font-size:13px;font-weight:500;padding:9px 15px;border-radius:10px;box-shadow:var(--shadow-sm)}
+.btn:hover{filter:brightness(1.06)}
+.btn.sec{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.content{padding:22px 30px 46px;display:grid;gap:18px}
+
+/* ---------- Cards ---------- */
+.card{background:#fff;border:1px solid var(--line-soft);border-radius:var(--r);box-shadow:var(--shadow-sm)}
+.card .hd{display:flex;align-items:center;gap:12px;padding:16px 18px 0}
+.card .hd h2{font-size:14.5px;font-weight:600;margin:0;letter-spacing:-.01em}
+.card .hd .spacer{flex:1}
+.card .bd{padding:16px 18px 18px}
+.link{font-size:12.5px;color:var(--blue);font-weight:500}
+
+/* ---------- Journey rail (signature) ---------- */
+.rail{background:#fff;border:1px solid var(--line-soft);border-radius:var(--r-lg);box-shadow:var(--shadow-md);overflow:hidden}
+.rail .rhead{display:flex;align-items:flex-end;gap:14px;padding:20px 22px 14px}
+.rail .rhead h2{margin:0;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.rail .rhead p{margin:3px 0 0;font-size:12.5px;color:var(--muted)}
+.rail .rhead .spacer{flex:1}
+.stages{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line-soft)}
+.stage{
+  position:relative;padding:16px 14px 18px;text-align:left;
+  border-right:1px solid var(--line-soft);background:#fff;transition:background .18s ease;
+}
+.stage:last-child{border-right:none}
+.stage:hover{background:#FAFBFF}
+.stage[aria-pressed="true"]{background:var(--mist)}
+.stage .nm{font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.stage .num{font-size:27px;font-weight:600;letter-spacing:-.03em;line-height:1.1;margin-top:5px;font-family:'IBM Plex Mono',monospace}
+.stage .bar{height:4px;border-radius:999px;background:var(--mist);margin-top:9px;overflow:hidden}
+.stage .bar i{display:block;height:100%;border-radius:999px;background:var(--accent)}
+.stage .meta{margin-top:9px;font-size:11px;color:var(--muted-2);display:flex;align-items:center;gap:5px;min-height:17px}
+.stage .stuck{color:var(--flag);background:var(--flag-bg);border-radius:999px;padding:1px 7px;font-weight:600;font-size:10.5px}
+.stage .arrow{position:absolute;right:-6px;top:50%;width:11px;height:11px;border-top:1px solid var(--line);border-right:1px solid var(--line);transform:translateY(-50%) rotate(45deg);background:#fff;z-index:2}
+.stage:last-child .arrow{display:none}
+.railfoot{display:flex;gap:22px;align-items:center;padding:12px 22px;background:#FAFBFF;border-top:1px solid var(--line-soft);font-size:12px;color:var(--muted)}
+.railfoot b{color:var(--ink);font-weight:600}
+
+/* ---------- Metrics ---------- */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.metric{background:#fff;border:1px solid var(--line-soft);border-radius:var(--r);padding:15px 16px;box-shadow:var(--shadow-sm)}
+.metric .k{font-size:11px;color:var(--muted);font-weight:500}
+.metric .v{font-size:25px;font-weight:600;letter-spacing:-.03em;margin-top:6px;font-family:'IBM Plex Mono',monospace}
+.metric .d{font-size:11.5px;margin-top:4px;color:var(--good);font-weight:500}
+.metric .d.down{color:var(--flag)}
+.spark{display:flex;align-items:flex-end;gap:3px;height:26px;margin-top:10px}
+.spark i{flex:1;background:var(--mist);border-radius:2px}
+.spark i.on{background:var(--accent)}
+
+.grid-2{display:grid;grid-template-columns:1.25fr .9fr;gap:18px;align-items:start}
+
+/* ---------- Lists ---------- */
+.row{display:flex;align-items:center;gap:12px;padding:11px 18px;border-top:1px solid var(--line-soft);width:100%;text-align:left}
+.row:hover{background:#FAFBFF}
+.row:first-of-type{border-top:none}
+.av{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--navy);background:var(--mist)}
+.av.solid{background:var(--accent);color:#fff}
+.rn{font-size:13.5px;font-weight:500;display:block}
+.rs{font-size:11.5px;color:var(--muted);margin-top:1px;display:block}
+.row .spacer{flex:1}
+.pill{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--mist);color:var(--navy);white-space:nowrap}
+.pill.warn{background:var(--flag-bg);color:var(--flag)}
+.pill.good{background:var(--good-bg);color:var(--good)}
+.pill.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.mini{font-size:12px;font-weight:500;color:var(--blue);padding:5px 10px;border-radius:8px;border:1px solid var(--line)}
+.mini:hover{background:var(--mist)}
+
+.tablehd{display:flex;gap:12px;padding:10px 18px;background:#FAFBFF;border-top:1px solid var(--line-soft);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+
+.filters{display:flex;gap:8px;flex-wrap:wrap;padding:14px 18px 4px}
+.chip{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);font-weight:500}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.search{flex:1;min-width:180px;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-family:inherit;font-size:12.5px;color:var(--ink)}
+.search::placeholder{color:var(--muted-2)}
+
+/* ---------- Person drawer ---------- */
+.scrim{position:fixed;inset:0;background:rgba(11,16,38,.42);opacity:0;pointer-events:none;transition:opacity .22s ease;z-index:70}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;right:0;height:100%;width:430px;max-width:94vw;background:#fff;z-index:80;
+  transform:translateX(100%);transition:transform .26s cubic-bezier(.22,1,.36,1);
+  box-shadow:var(--shadow-lg);display:flex;flex-direction:column;
+}
+.drawer.on{transform:translateX(0)}
+.dhead{padding:22px 22px 16px;background:var(--ink);color:#fff}
+.dhead .top{display:flex;align-items:center;gap:14px}
+.dhead .av{width:48px;height:48px;font-size:16px;background:var(--accent);color:#fff}
+.dhead h3{margin:0;font-size:18px;font-weight:600;letter-spacing:-.01em}
+.dhead .s{font-size:12px;color:rgba(255,255,255,.55);margin-top:2px}
+.dhead .x{margin-left:auto;color:rgba(255,255,255,.6);font-size:20px;line-height:1;padding:4px 8px;border-radius:8px}
+.dhead .x:hover{background:rgba(255,255,255,.1);color:#fff}
+.journeymini{display:flex;gap:4px;margin-top:18px}
+.journeymini i{flex:1;height:5px;border-radius:999px;background:rgba(255,255,255,.16)}
+.journeymini i.on{background:var(--accent)}
+.journeymini i.now{background:#fff}
+.dbody{flex:1;overflow-y:auto;padding:0 0 26px}
+.dsec{padding:18px 22px;border-bottom:1px solid var(--line-soft)}
+.dsec h4{margin:0 0 12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:6px 0;font-size:13px;border-bottom:1px dashed var(--line-soft)}
+.kv:last-child{border-bottom:none}
+.kv span{color:var(--muted)}
+.kv b{font-weight:500}
+.alert{display:flex;gap:11px;background:var(--flag-bg);border:1px solid rgba(180,83,9,.16);border-radius:var(--r);padding:13px 14px}
+.alert .t{font-size:12.5px;font-weight:600;color:var(--flag)}
+.alert .d{font-size:12px;color:rgba(180,83,9,.9);margin-top:3px;line-height:1.45}
+.tl{position:relative;padding-left:20px}
+.tl:before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.tli{position:relative;padding:0 0 15px}
+.tli:before{content:"";position:absolute;left:-19px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--mist);border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.tli.hi:before{background:var(--accent)}
+.tli .w{font-size:13px;font-weight:500}
+.tli .d{font-size:11.5px;color:var(--muted);margin-top:1px}
+.dfoot{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:9px;background:#FAFBFF}
+
+/* ---------- Phone (member) ---------- */
+.memberwrap{display:grid;grid-template-columns:390px 1fr;gap:36px;padding:30px;align-items:start}
+.phone{
+  width:390px;height:800px;background:var(--ink);border-radius:46px;padding:11px;
+  box-shadow:var(--shadow-lg);position:sticky;top:76px;
+}
+.screen{width:100%;height:100%;background:#fff;border-radius:36px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.status{display:flex;justify-content:space-between;padding:13px 24px 4px;font-size:11.5px;font-weight:600}
+.mhead{padding:8px 22px 16px}
+.mhead .hi{font-size:21px;font-weight:600;letter-spacing:-.02em}
+.mhead .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.mbody{flex:1;overflow-y:auto;padding:0 18px 20px;display:grid;gap:13px;align-content:start}
+.mcard{border:1px solid var(--line-soft);border-radius:var(--r);padding:15px;box-shadow:var(--shadow-sm);background:#fff}
+.mcard.dark{background:var(--ink);color:#fff;border-color:transparent}
+.mcard.dark .lbl{color:rgba(255,255,255,.5)}
+.mcard.tint{background:var(--mist);border-color:transparent}
+.lbl{font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--muted-2)}
+.verse{font-size:15.5px;line-height:1.5;margin-top:9px;font-weight:500}
+.vref{font-size:12px;margin-top:8px;color:var(--accent);font-weight:600}
+.mcard .t{font-size:14.5px;font-weight:600;margin-top:7px}
+.mcard .d{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+.prog{height:6px;border-radius:999px;background:var(--mist);margin-top:11px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.mcard.dark .prog{background:rgba(255,255,255,.14)}
+.mbtn{width:100%;background:var(--accent);color:#fff;font-size:13.5px;font-weight:500;padding:11px;border-radius:11px;margin-top:12px}
+.mbtn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.streak{display:flex;gap:6px;margin-top:11px}
+.streak i{flex:1;height:30px;border-radius:7px;background:var(--mist);display:grid;place-items:center;font-size:9.5px;font-weight:600;color:var(--muted-2)}
+.streak i.on{background:var(--accent);color:#fff}
+.tabbar{display:flex;border-top:1px solid var(--line-soft);padding:9px 6px 20px;background:#fff}
+.tab{flex:1;display:grid;gap:4px;justify-items:center;font-size:10px;font-weight:500;color:var(--muted-2);padding:5px 0}
+.tab .ic{width:20px;height:20px}
+.tab[aria-current="true"]{color:var(--accent);font-weight:600}
+.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.amt{border:1px solid var(--line);border-radius:11px;padding:11px 0;font-size:14px;font-weight:600;text-align:center;font-family:'IBM Plex Mono',monospace}
+.amt[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ---------- Talk track panel ---------- */
+.track{position:sticky;top:76px;display:grid;gap:14px}
+.track .card .bd{font-size:13px;color:var(--muted);line-height:1.55}
+.beat{display:flex;gap:12px;padding:12px 18px;border-top:1px solid var(--line-soft)}
+.beat .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:var(--accent);padding-top:2px}
+.beat .w{font-size:13px;font-weight:500;color:var(--ink)}
+.beat .s{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+
+/* ---------- Settings ---------- */
+.swatches{display:flex;gap:10px;margin-top:10px}
+.sw{width:38px;height:38px;border-radius:11px;border:2px solid transparent;box-shadow:var(--shadow-sm)}
+.sw[aria-pressed="true"]{border-color:var(--ink)}
+.toggle{width:40px;height:23px;border-radius:999px;background:var(--line);position:relative;flex:none}
+.toggle[aria-pressed="true"]{background:var(--accent)}
+.toggle:after{content:"";position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:left .18s ease;box-shadow:var(--shadow-sm)}
+.toggle[aria-pressed="true"]:after{left:20px}
+
+.emptynote{padding:26px 18px;text-align:center;color:var(--muted);font-size:13px}
+
+@media (max-width:1180px){
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .memberwrap{grid-template-columns:1fr;justify-items:center}
+  .phone{position:static}
+  .track{position:static;width:100%;max-width:560px}
+}
+@media (max-width:900px){
+  .sidebar{display:none}
+  .stages{grid-template-columns:repeat(4,1fr)}
+  .stage .arrow{display:none}
+}
+@media (max-width:620px){
+  .stages{grid-template-columns:repeat(2,1fr)}
+  .metrics{grid-template-columns:1fr}
+  .content,.topline{padding-left:16px;padding-right:16px}
+  .phone{width:100%;max-width:390px;height:740px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="demobar">
+  <div class="brandmark"><span class="dot"></span> Discipleship Operating System</div>
+  <span class="tag">Client demo</span>
+  <div class="spacer"></div>
+  <div class="picker">
+    <label for="churchSel">Church</label>
+    <select id="churchSel">
+      <option value="0">Grace Community Church</option>
+      <option value="1">Riverbend Fellowship</option>
+    </select>
+  </div>
+  <div class="seg" role="tablist" aria-label="View">
+    <button role="tab" id="viewStaff" aria-selected="true">Staff view</button>
+    <button role="tab" id="viewMember" aria-selected="false">Member app</button>
+  </div>
+  <button class="ghostbtn" id="talkBtn">Talk track</button>
+</div>
+
+<div id="app"></div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Person profile"></aside>
+
+<script>
+/* ============================ DEMO DATA ============================ */
+const CHURCHES = [
+  {name:"Grace Community Church", short:"GCC", city:"Naperville, IL", accent:"#2563FF", people:412, weekly:38420},
+  {name:"Riverbend Fellowship", short:"RF", city:"Aurora, IL", accent:"#1E3A8A", people:186, weekly:14970}
+];
+
+const STAGES = ["Visitor","Guest","Attender","Member","Volunteer","Disciple","Leader"];
+const STAGE_COUNTS = [34,21,96,148,62,28,11];
+const STAGE_STUCK  = [0,4,3,0,1,0,0];
+
+const PEOPLE = [
+  {id:1, n:"Marcus Webb", stage:1, days:43, since:"June 22", last:"21 days ago", flag:"No contact in 3 weeks. Visited 5 times, never took a next step.",
+   family:"Marcus and Dana Webb, 2 kids in Grace Kids", give:"Not giving", serve:"None", group:"None",
+   tl:[{w:"Filled out a connect card",d:"June 22 · first visit",hi:true},{w:"Checked in 2 kids to Grace Kids",d:"June 29"},{w:"Attended service",d:"July 6, July 13, July 27"},{w:"Opened the Next Steps email, did not register",d:"July 8"},{w:"Flagged: 43 days as a Guest",d:"Today",hi:true}],
+   next:"Invite to the August 10 Next Steps lunch"},
+  {id:2, n:"Sam Ortiz", stage:2, days:71, since:"May 25", last:"34 days ago", flag:"Attender for 71 days. Average move to Member is 38 days.",
+   family:"Single, no kids on file", give:"$40/mo since June", serve:"None", group:"None",
+   tl:[{w:"Moved from Guest to Attender",d:"May 25",hi:true},{w:"Started recurring giving",d:"June 2"},{w:"Attended 8 of last 10 Sundays",d:"Ongoing"},{w:"No group, no serving team",d:"Gap",hi:true}],
+   next:"Personal invite to a Tuesday group from Priya"},
+  {id:3, n:"Chris Vaughn", stage:2, days:58, since:"June 7", last:"29 days ago", flag:"Attendance dropped from weekly to twice in 6 weeks.",
+   family:"Chris and Alina Vaughn", give:"Lapsed after June", serve:"None", group:"Men's Tuesday (inactive)",
+   tl:[{w:"Joined Men's Tuesday group",d:"June 10"},{w:"Stopped attending group",d:"July 1",hi:true},{w:"Giving stopped",d:"July 5",hi:true},{w:"Last Sunday attendance",d:"July 6"}],
+   next:"Pastor call this week, not an email"},
+  {id:4, n:"Tyler Brooks", stage:0, days:6, since:"July 28", last:"2 days ago", flag:null,
+   family:"Tyler and Megan Brooks", give:"Not giving", serve:"None", group:"None",
+   tl:[{w:"First visit, submitted a connect card",d:"July 28",hi:true},{w:"Welcome text sent automatically",d:"July 28"},{w:"Opened the welcome video",d:"July 30"},{w:"Second visit",d:"August 2"}],
+   next:"Automated: coffee invite sends Thursday"},
+  {id:5, n:"Alicia Romero", stage:2, days:12, since:"July 22", last:"4 days ago", flag:null,
+   family:"Alicia Romero, 1 child", give:"$75/mo", serve:"Interested in Kids", group:"Wednesday Women's",
+   tl:[{w:"Moved from Guest to Attender",d:"July 22",hi:true},{w:"Joined Wednesday Women's group",d:"July 23"},{w:"Started giving",d:"July 25"},{w:"Marked interest in serving",d:"August 1",hi:true}],
+   next:"Kids team background check invite"},
+  {id:6, n:"Rachel Kim", stage:3, days:19, since:"July 15", last:"5 days ago", flag:null,
+   family:"Rachel and Daniel Kim", give:"$220/mo", serve:"None yet", group:"Sunday 5pm",
+   tl:[{w:"Completed the membership class",d:"July 15",hi:true},{w:"Baptized",d:"July 20",hi:true},{w:"Joined Sunday 5pm group",d:"July 26"}],
+   next:"Serving team match, worship or hospitality"},
+  {id:7, n:"Dana Whitfield", stage:4, days:210, since:"January 6", last:"Yesterday", flag:null,
+   family:"Dana Whitfield, 3 kids", give:"$150/mo", serve:"Grace Kids, 2 Sundays a month", group:"Wednesday Women's",
+   tl:[{w:"Serving in Grace Kids",d:"Since February"},{w:"Completed volunteer training",d:"March 3"},{w:"Background check current through 2027",d:"On file"},{w:"Asked about leading a group",d:"July 30",hi:true}],
+   next:"Group leader track, starts September"},
+  {id:8, n:"Priya Anand", stage:5, days:365, since:"2024", last:"Today", flag:null,
+   family:"Priya and Raj Anand", give:"$400/mo", serve:"Group leader, Tuesday", group:"Leads Tuesday Women's",
+   tl:[{w:"Leads Tuesday Women's, 11 members",d:"Ongoing"},{w:"Completed leader development",d:"February"},{w:"Discipling 3 people one on one",d:"Ongoing",hi:true}],
+   next:"Campus leadership conversation"},
+  {id:9, n:"Jordan Ellis", stage:1, days:9, since:"July 26", last:"3 days ago", flag:null,
+   family:"Jordan Ellis", give:"Not giving", serve:"None", group:"None",
+   tl:[{w:"First visit",d:"July 26",hi:true},{w:"Welcome text and video",d:"July 26"},{w:"Returned for a second visit",d:"August 2"}],
+   next:"Automated: next steps invite Sunday"},
+  {id:10, n:"Kevin and Thao Nguyen", stage:3, days:540, since:"2024", last:"6 days ago", flag:null,
+   family:"Nguyen family, 3 kids", give:"$310/mo", serve:"Hospitality, occasional", group:"Sunday 5pm",
+   tl:[{w:"Members since 2024",d:"On file"},{w:"Giving consistent 18 months",d:"Ongoing"},{w:"Kids check in every week",d:"Ongoing"}],
+   next:"Invite Kevin to the serving team interest night"},
+  {id:11, n:"Hannah Doyle", stage:4, days:150, since:"March 8", last:"2 days ago", flag:null,
+   family:"Hannah Doyle", give:"$90/mo", serve:"Worship, weekly", group:"Wednesday Women's",
+   tl:[{w:"Joined the worship team",d:"March 8"},{w:"Serving weekly",d:"Ongoing"},{w:"Completed the leader interest form",d:"July 18",hi:true}],
+   next:"Worship leader development track"},
+  {id:12, n:"Grace Mbeki", stage:6, days:900, since:"2023", last:"Today", flag:null,
+   family:"Grace and Peter Mbeki", give:"$500/mo", serve:"Campus leader", group:"Leads leaders",
+   tl:[{w:"Campus leadership team",d:"Since 2023"},{w:"Oversees 6 group leaders",d:"Ongoing"},{w:"Leading the fall launch",d:"Planned",hi:true}],
+   next:"Fall group launch planning"}
+];
+
+const TALK_BEATS = [
+  {n:"01", w:"Open on the Journey, not the features", s:"Point at the rail. Ask the pastor to guess how many people are stuck between Guest and Attender. They will not know. That is the sale."},
+  {n:"02", w:"Click a red flag", s:"Open Marcus Webb. Show 43 days as a Guest with no contact in 3 weeks. Say: this person is already leaving and nobody knows it yet."},
+  {n:"03", w:"Show the system does the work", s:"Point at Tyler Brooks. Welcome text, video, and coffee invite fired automatically. No staff time spent."},
+  {n:"04", w:"Switch to the member app", s:"Same person, same data, their brand. This is what replaces the Bible app, the giving page, and the volunteer texts."},
+  {n:"05", w:"Change their brand color in Settings", s:"Prove white label in 5 seconds. Their logo, their color, their app in the store, not ours."},
+  {n:"06", w:"Land the money math", s:"Planning Center plus a website plus a giving platform runs about $400 a month. Tier 2 is $100. Then stop talking."}
+];
+
+/* ============================ ICONS ============================ */
+const IC = {
+  dash:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>',
+  people:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.5a3 3 0 010 5.6"/><path d="M18 14.5c2 .8 3 2.6 3 5"/></svg>',
+  serv:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M8 4v5"/></svg>',
+  kids:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>',
+  give:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.4-7-9.4A4.1 4.1 0 0112 9a4.1 4.1 0 017 2.6c0 5-7 9.4-7 9.4z"/></svg>',
+  res:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2 2 0 016 4h5v16H6a2 2 0 01-2-2z"/><path d="M20 5.5A2 2 0 0018 4h-5v16h5a2 2 0 002-2z"/></svg>',
+  msg:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 15a3 3 0 01-3 3H8l-4 3V6a3 3 0 013-3h10a3 3 0 013 3z"/></svg>',
+  set:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1 2 2 0 11-4 0 1.6 1.6 0 00-2.7-1.1l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003 15a2 2 0 010-4 1.6 1.6 0 001.1-2.7l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 009.6 4.4a2 2 0 014 0 1.6 1.6 0 002.7 1.1l.1-.1a2 2 0 112.8 2.8l-.1.1A1.6 1.6 0 0021 11a2 2 0 010 4z"/></svg>',
+  home:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 19z"/></svg>',
+  grow:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20V9"/><path d="M12 9C12 6 9.5 4 6 4c0 3.5 2.5 5 6 5z"/><path d="M12 12c0-3 2.5-5 6-5 0 3.5-2.5 5-6 5z"/></svg>',
+  hand:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 12V5a1.5 1.5 0 013 0v6"/><path d="M11 11V4.5a1.5 1.5 0 013 0V11"/><path d="M14 11.5V6.5a1.5 1.5 0 013 0V14a6 6 0 01-6 6h-.5a5.5 5.5 0 01-5.5-5.5V12a1.5 1.5 0 013 0"/></svg>',
+  user:'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>'
+};
+
+/* ============================ STATE ============================ */
+const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100};
+const $ = id => document.getElementById(id);
+const app = $("app");
+const initials = n => n.split(/[\s]+/).filter(w=>w[0]&&/[A-Za-z]/.test(w[0])).slice(0,2).map(w=>w[0].toUpperCase()).join("");
+
+function setAccent(){ document.documentElement.style.setProperty("--accent", CHURCHES[S.church].accent); }
+
+/* ============================ STAFF VIEW ============================ */
+const NAVS = [
+  ["dashboard","Dashboard",IC.dash,null],
+  ["people","People",IC.people,"8"],
+  ["services","Services",IC.serv,null],
+  ["kids","Grace Kids",IC.kids,null],
+  ["giving","Giving",IC.give,null],
+  ["resources","Resources",IC.res,null],
+  ["messages","Messages",IC.msg,null],
+  ["settings","Settings",IC.set,null]
+];
+
+function sidebar(){
+  const c = CHURCHES[S.church];
+  return `<nav class="sidebar" aria-label="Main">
+    <div class="church">
+      <div class="crest">${c.short}</div>
+      <div><div class="n">${c.name.split(" ").slice(0,2).join(" ")}</div><div class="s">${c.city}</div></div>
+    </div>
+    <div class="navlbl">Lead</div>
+    ${NAVS.slice(0,2).map(navBtn).join("")}
+    <div class="navlbl">Run</div>
+    ${NAVS.slice(2,6).map(navBtn).join("")}
+    <div class="navlbl">Manage</div>
+    ${NAVS.slice(6).map(navBtn).join("")}
+    <div class="sidefoot">Signed in as Pastor Reed<br>Staff account</div>
+  </nav>`;
+}
+function navBtn([id,label,icon,cnt]){
+  return `<button class="nav" data-tab="${id}" aria-current="${S.tab===id}">${icon}<span>${label}</span>${cnt?`<span class="cnt">${cnt}</span>`:""}</button>`;
+}
+
+function journeyRail(){
+  const total = STAGE_COUNTS.reduce((a,b)=>a+b,0);
+  const max = Math.max(...STAGE_COUNTS);
+  return `<section class="rail">
+    <div class="rhead">
+      <div>
+        <h2>The Journey</h2>
+        <p>Where all ${total} people at ${CHURCHES[S.church].name} are right now. Click a stage to see who is in it.</p>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn sec" data-tab="people">Open People</button>
+    </div>
+    <div class="stages">
+      ${STAGES.map((s,i)=>`
+        <button class="stage" data-stage="${i}" aria-pressed="${S.stageFilter===i}">
+          <div class="nm">${s}</div>
+          <div class="num">${STAGE_COUNTS[i]}</div>
+          <div class="bar"><i style="width:${Math.round(STAGE_COUNTS[i]/max*100)}%"></i></div>
+          <div class="meta">${STAGE_STUCK[i] ? `<span class="stuck">${STAGE_STUCK[i]} stuck</span>` : `<span>Moving</span>`}</div>
+          <span class="arrow"></span>
+        </button>`).join("")}
+    </div>
+    <div class="railfoot">
+      <span><b>8</b> people flagged as stuck too long</span>
+      <span><b>14</b> next steps taken in the last 7 days</span>
+      <span><b>0</b> people with no owner</span>
+    </div>
+  </section>`;
+}
+
+function metrics(){
+  const m = [
+    {k:"Attendance last Sunday", v:"412", d:"Up 6% over 4 weeks", spark:[3,4,3,5,4,6,7]},
+    {k:"First time guests", v:"9", d:"Up 2 from last week", spark:[2,3,2,4,3,3,5]},
+    {k:"Next steps taken", v:"14", d:"Up 4 from last week", spark:[2,3,4,3,5,4,6]},
+    {k:"Giving month to date", v:"$"+CHURCHES[S.church].weekly.toLocaleString(), d:"Down 3% vs last month", down:true, spark:[6,5,6,4,5,4,4]}
+  ];
+  return `<div class="metrics">${m.map(x=>`
+    <div class="metric">
+      <div class="k">${x.k}</div>
+      <div class="v">${x.v}</div>
+      <div class="d ${x.down?"down":""}">${x.d}</div>
+      <div class="spark">${x.spark.map((h,i)=>`<i class="${i===x.spark.length-1?"on":""}" style="height:${h*13}%"></i>`).join("")}</div>
+    </div>`).join("")}</div>`;
+}
+
+function followUpCard(){
+  const flagged = PEOPLE.filter(p=>p.flag);
+  return `<section class="card">
+    <div class="hd"><h2>Needs a person, not an email</h2><div class="spacer"></div><span class="pill warn">${flagged.length} flagged</span></div>
+    <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">These people stopped moving. The system caught it before anyone noticed on a Sunday.</div>
+    ${flagged.map(p=>`
+      <button class="row" data-person="${p.id}">
+        <span class="av">${initials(p.n)}</span>
+        <span><span class="rn">${p.n}</span><span class="rs">${STAGES[p.stage]} for ${p.days} days · last contact ${p.last}</span></span>
+        <span class="spacer"></span>
+        <span class="pill warn">Stuck</span>
+      </button>`).join("")}
+  </section>`;
+}
+
+function autoCard(){
+  const rows = [
+    ["Welcome text and video","Sends 2 hours after a first visit","9 sent this week"],
+    ["Coffee invite from a staff member","Sends after a second visit","4 sent this week"],
+    ["Next Steps class invite","Sends at day 21 as a Guest","6 sent this week"],
+    ["Serving interest follow up","Sends when someone marks interest","3 sent this week"],
+    ["Giving thank you and statement","Sends on first gift","11 sent this week"]
+  ];
+  return `<section class="card">
+    <div class="hd"><h2>Running without staff time</h2><div class="spacer"></div><span class="pill good">All active</span></div>
+    <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">33 messages went out this week. None of them were written on a Monday morning.</div>
+    ${rows.map(r=>`<div class="row"><span class="av solid" style="font-size:10px">AUTO</span><span><span class="rn">${r[0]}</span><span class="rs">${r[1]}</span></span><span class="spacer"></span><span class="pill ghost">${r[2]}</span></div>`).join("")}
+  </section>`;
+}
+
+function dashboard(){
+  return `${journeyRail()}${metrics()}
+  <div class="grid-2">${followUpCard()}
+    <div style="display:grid;gap:18px">
+      <section class="card">
+        <div class="hd"><h2>Church health</h2><div class="spacer"></div><span class="pill">74 of 100</span></div>
+        <div class="bd">
+          ${[["People taking a next step","68%"],["Members in a group","54%"],["Adults serving","41%"],["Guests contacted within 48 hours","92%"]].map(x=>`
+            <div style="margin-bottom:13px">
+              <div style="display:flex;justify-content:space-between;font-size:12.5px"><span>${x[0]}</span><b class="mono">${x[1]}</b></div>
+              <div class="bar" style="height:6px;border-radius:999px;background:var(--mist);margin-top:6px;overflow:hidden"><i style="display:block;height:100%;width:${x[1]};background:var(--accent);border-radius:999px"></i></div>
+            </div>`).join("")}
+          <p style="font-size:12px;color:var(--muted);margin:14px 0 0">Adults serving is the weakest number. 96 attenders have never been asked.</p>
+        </div>
+      </section>
+      ${autoCard()}
+    </div>
+  </div>`;
+}
+
+function peopleView(){
+  const list = PEOPLE.filter(p=>{
+    const okStage = S.stageFilter===null || p.stage===S.stageFilter;
+    const okQ = !S.q || p.n.toLowerCase().includes(S.q.toLowerCase());
+    return okStage && okQ;
+  });
+  return `${journeyRail()}
+  <section class="card">
+    <div class="hd" style="padding-bottom:0"><h2>People</h2><div class="spacer"></div>
+      <span class="pill ghost">${list.length} shown${S.stageFilter!==null?` · ${STAGES[S.stageFilter]}`:""}</span></div>
+    <div class="filters">
+      <input class="search" id="q" placeholder="Search people" value="${S.q}" aria-label="Search people">
+      <button class="chip" data-stage="all" aria-pressed="${S.stageFilter===null}">All stages</button>
+      ${STAGES.map((s,i)=>`<button class="chip" data-stage="${i}" aria-pressed="${S.stageFilter===i}">${s}</button>`).join("")}
+    </div>
+    <div class="tablehd" style="margin-top:12px"><span style="width:46px"></span><span style="flex:1">Person</span><span style="width:150px">Stage</span><span style="width:120px">Last contact</span><span style="width:90px">Status</span></div>
+    ${list.length ? list.map(p=>`
+      <button class="row" data-person="${p.id}">
+        <span class="av">${initials(p.n)}</span>
+        <span style="flex:1"><span class="rn">${p.n}</span><span class="rs">${p.family}</span></span>
+        <span style="width:150px"><span class="pill">${STAGES[p.stage]} · ${p.days}d</span></span>
+        <span style="width:120px;font-size:12px;color:var(--muted)">${p.last}</span>
+        <span style="width:90px">${p.flag?`<span class="pill warn">Stuck</span>`:`<span class="pill good">On track</span>`}</span>
+      </button>`).join("") : `<div class="emptynote">Nobody matches that filter yet. Clear the search or pick another stage.</div>`}
+  </section>`;
+}
+
+function servicesView(){
+  const order = [["9:00","Countdown and welcome","Media: Josh"],["9:04","Worship set, 3 songs","Worship: Hannah D."],["9:22","Announcements and giving","Host: Pastor Reed"],["9:27","Message: Known, week 2","Pastor Reed"],["9:52","Response and next steps","Team: Priya, Dana"],["10:00","Dismiss and lobby follow up","Guest team"]];
+  return `<section class="card">
+    <div class="hd"><h2>Sunday, August 9 · 9:00 service</h2><div class="spacer"></div><span class="pill good">18 of 21 roles filled</span></div>
+    <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">Run sheet, team, and songs in one place. Volunteers see only their part in the member app.</div>
+    ${order.map(o=>`<div class="row"><span class="mono" style="width:52px;font-size:12px;color:var(--muted)">${o[0]}</span><span><span class="rn">${o[1]}</span><span class="rs">${o[2]}</span></span></div>`).join("")}
+  </section>
+  <section class="card">
+    <div class="hd"><h2>Open roles</h2><div class="spacer"></div><button class="mini">Send requests</button></div>
+    ${[["Grace Kids, 2s and 3s","2 open","Dana suggested 3 people"],["Parking team","1 open","No suggestions yet"]].map(r=>`<div class="row"><span class="av">!</span><span><span class="rn">${r[0]}</span><span class="rs">${r[2]}</span></span><span class="spacer"></span><span class="pill warn">${r[1]}</span></div>`).join("")}
+  </section>`;
+}
+
+function kidsView(){
+  return `<section class="card">
+    <div class="hd"><h2>Check in, last Sunday</h2><div class="spacer"></div><span class="pill">86 kids</span></div>
+    <div class="bd">${metrics_kids()}</div>
+    ${[["Webb, Ellie and Grant","Room 2 · pickup code 4471","Marcus Webb"],["Nguyen, Mia","Room 4 · pickup code 8802","Thao Nguyen"],["Whitfield, Jonah","Room 3 · allergy alert on file","Dana Whitfield"]].map(k=>`<div class="row"><span class="av">${initials(k[0].split(",")[1]||"K")}</span><span><span class="rn">${k[0]}</span><span class="rs">${k[1]}</span></span><span class="spacer"></span><span class="pill ghost">${k[2]}</span></div>`).join("")}
+  </section>`;
+}
+function metrics_kids(){
+  return `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+    ${[["Checked in","86"],["First time kids","7"],["Volunteers on duty","14"]].map(x=>`<div><div class="k" style="font-size:11px;color:var(--muted)">${x[0]}</div><div class="v mono" style="font-size:23px;font-weight:600;margin-top:4px">${x[1]}</div></div>`).join("")}
+  </div>`;
+}
+
+function givingView(){
+  const c = CHURCHES[S.church];
+  return `<div class="metrics">
+    ${[["Month to date","$"+c.weekly.toLocaleString(),"Down 3% vs July"],["Recurring givers","148","Up 6 this month"],["Average gift","$127","Flat"],["First time givers","5","Up 2"]].map(x=>`<div class="metric"><div class="k">${x[0]}</div><div class="v">${x[1]}</div><div class="d">${x[2]}</div></div>`).join("")}
+  </div>
+  <div class="grid-2">
+    <section class="card">
+      <div class="hd"><h2>Recent gifts</h2><div class="spacer"></div><button class="mini">Export</button></div>
+      ${[["Priya Anand","$400","Recurring · General"],["Kevin and Thao Nguyen","$310","Recurring · General"],["Rachel Kim","$220","Recurring · General"],["Dana Whitfield","$150","Recurring · Grace Kids"],["Alicia Romero","$75","First gift · General"]].map(g=>`<div class="row"><span class="av">${initials(g[0])}</span><span><span class="rn">${g[0]}</span><span class="rs">${g[2]}</span></span><span class="spacer"></span><b class="mono" style="font-size:13.5px">${g[1]}</b></div>`).join("")}
+    </section>
+    <section class="card">
+      <div class="hd"><h2>Giving that stopped</h2><div class="spacer"></div><span class="pill warn">2 lapsed</span></div>
+      <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">Lapsed giving is usually a discipleship signal before it is a budget problem.</div>
+      ${[["Chris Vaughn","Stopped after June","$85/mo"],["T. and L. Barrett","Card expired July 2","$60/mo"]].map(g=>`<div class="row"><span class="av">${initials(g[0])}</span><span><span class="rn">${g[0]}</span><span class="rs">${g[1]}</span></span><span class="spacer"></span><span class="pill warn">${g[2]}</span></div>`).join("")}
+    </section>
+  </div>`;
+}
+
+function resourcesView(){
+  return `<section class="card">
+    <div class="hd"><h2>Published to your people</h2><div class="spacer"></div><span class="pill good">Your name on all of it</span></div>
+    <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">Written for ${CHURCHES[S.church].name} and delivered inside your app. Members never see another brand.</div>
+    ${[["Known: a 5 day reading plan","Sermon series companion","218 started"],["First 30 days at Grace","New guest path","41 started"],["Leading a group well","Leader training, 6 lessons","12 leaders"],["Money and faith","4 week study","64 started"]].map(r=>`<div class="row"><span class="av">${IC.res}</span><span><span class="rn">${r[0]}</span><span class="rs">${r[1]}</span></span><span class="spacer"></span><span class="pill ghost">${r[2]}</span></div>`).join("")}
+  </section>`;
+}
+
+function messagesView(){
+  return `<section class="card">
+    <div class="hd"><h2>Automations</h2><div class="spacer"></div><button class="mini">New automation</button></div>
+    ${[["First visit welcome","Text plus email, 2 hours after check in","On"],["Guest at 21 days","Invite to Next Steps","On"],["Stuck alert to staff","Any stage over 40 days","On"],["Serving interest","Route to team leader","On"],["Birthday note from the pastor","Sends 8am","Off"]].map(a=>`<div class="row"><span class="av solid" style="font-size:10px">${a[2]==="On"?"ON":"OFF"}</span><span><span class="rn">${a[0]}</span><span class="rs">${a[1]}</span></span><span class="spacer"></span><span class="toggle" role="button" aria-pressed="${a[2]==="On"}"></span></div>`).join("")}
+  </section>
+  <section class="card">
+    <div class="hd"><h2>Sent this week</h2><div class="spacer"></div><span class="pill">33 messages</span></div>
+    ${[["Sunday reminder","All members · 412 recipients","Sunday 7:00am"],["Group leader huddle","11 leaders","Tuesday"],["Kids volunteer gap","14 volunteers","Wednesday"]].map(m=>`<div class="row"><span class="av">${IC.msg}</span><span><span class="rn">${m[0]}</span><span class="rs">${m[1]}</span></span><span class="spacer"></span><span class="pill ghost">${m[2]}</span></div>`).join("")}
+  </section>`;
+}
+
+function settingsView(){
+  const c = CHURCHES[S.church];
+  return `<section class="card">
+    <div class="hd"><h2>Your brand</h2><div class="spacer"></div><span class="pill good">White label</span></div>
+    <div class="bd">
+      <div class="kv"><span>Church name</span><b>${c.name}</b></div>
+      <div class="kv"><span>App name in the store</span><b>${c.short} Church</b></div>
+      <div class="kv"><span>Domain</span><b>app.${c.short.toLowerCase()}church.org</b></div>
+      <div style="margin-top:16px">
+        <div class="eyebrow">Primary color</div>
+        <div class="swatches" id="swatches">
+          ${["#2563FF","#1E3A8A","#0B1026"].map(h=>`<button class="sw" data-color="${h}" style="background:${h}" aria-pressed="${c.accent.toLowerCase()===h.toLowerCase()}" aria-label="Set ${h}"></button>`).join("")}
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin:10px 0 0">Change this and every screen updates instantly, including the member app. Any hex code works.</p>
+      </div>
+    </div>
+  </section>
+  <section class="card">
+    <div class="hd"><h2>What this replaces</h2></div>
+    <div class="bd">
+      ${[["Planning Center","$199/mo","Replaced"],["Website and hosting","$95/mo","Replaced"],["Giving platform fees","$70/mo","Replaced"],["Bible and reading app","$40/mo","Replaced"]].map(r=>`<div class="kv"><span>${r[0]}</span><b>${r[1]} <span class="pill good" style="margin-left:8px">${r[2]}</span></b></div>`).join("")}
+      <div class="kv" style="margin-top:8px;border-top:1px solid var(--line);padding-top:12px"><span><b>Current total</b></span><b class="mono" style="font-size:16px">$404 / mo</b></div>
+      <div class="kv"><span><b>Discipleship Operating System, Tier 2</b></span><b class="mono" style="font-size:16px;color:var(--accent)">$100 / mo</b></div>
+      <p style="font-size:12.5px;color:var(--muted);margin:12px 0 0">Net savings of $304 a month, $3,648 a year, before counting staff hours.</p>
+    </div>
+  </section>`;
+}
+
+function staffView(){
+  const titles = {
+    dashboard:["Dashboard","Sunday, August 9 is 5 days out"],
+    people:["People","Every person, and the step they are on"],
+    services:["Services","Plan Sunday and fill the team"],
+    kids:["Grace Kids","Check in, rooms, and safety"],
+    giving:["Giving","Generosity and the signals inside it"],
+    resources:["Resources","Content published under your name"],
+    messages:["Messages","What the system sends so staff does not have to"],
+    settings:["Settings","Your brand, your data, your app"]
+  };
+  const body = {
+    dashboard:dashboard, people:peopleView, services:servicesView, kids:kidsView,
+    giving:givingView, resources:resourcesView, messages:messagesView, settings:settingsView
+  }[S.tab]();
+  const [t,sub] = titles[S.tab];
+  return `<div class="shell">${sidebar()}
+    <main class="main">
+      <div class="topline">
+        <div><h1>${t}</h1><div class="sub">${sub}</div></div>
+        <div class="spacer"></div>
+        <button class="btn sec">Search</button>
+        <button class="btn">Add a person</button>
+      </div>
+      <div class="content">${body}</div>
+    </main>
+  </div>`;
+}
+
+/* ============================ MEMBER VIEW ============================ */
+function memberHome(){
+  return `<div class="mhead"><div class="hi">Good morning, Alicia</div><div class="sub">Day 12 with ${CHURCHES[S.church].name}</div></div>
+  <div class="mbody">
+    <div class="mcard dark">
+      <div class="lbl">Today's verse</div>
+      <div class="verse">"And let us consider how to stir up one another to love and good works."</div>
+      <div class="vref" style="color:#fff;opacity:.75">Hebrews 10:24</div>
+    </div>
+    <div class="mcard tint">
+      <div class="lbl">Your next step</div>
+      <div class="t">Serve on the Kids team</div>
+      <div class="d">You marked interest on Friday. One form left, then Dana will text you about a Sunday.</div>
+      <button class="mbtn">Start the background check</button>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Keep reading</div>
+      <div class="t">Known: a 5 day plan</div>
+      <div class="d">Day 3 of 5 · about 6 minutes</div>
+      <div class="prog"><i style="width:60%"></i></div>
+      <div class="streak">${["M","T","W","T","F","S","S"].map((d,i)=>`<i class="${i<4?"on":""}">${d}</i>`).join("")}</div>
+    </div>
+    <div class="mcard">
+      <div class="lbl">This week</div>
+      <div class="t">Wednesday Women's group</div>
+      <div class="d">Wednesday 7:00pm at the Hollands' house. 9 going.</div>
+      <button class="mbtn ghost">I'm coming</button>
+    </div>
+    <div class="mcard">
+      <div class="lbl">From your church</div>
+      <div class="t">Known, week 2</div>
+      <div class="d">Sunday's message and notes are ready.</div>
+    </div>
+  </div>`;
+}
+function memberGive(){
+  const amounts=[50,100,250];
+  return `<div class="mhead"><div class="hi">Give</div><div class="sub">Grace Community Church</div></div>
+  <div class="mbody">
+    <div class="mcard">
+      <div class="lbl">Amount</div>
+      <div class="amounts">${amounts.map(a=>`<button class="amt" data-amt="${a}" aria-pressed="${S.amount===a}">$${a}</button>`).join("")}</div>
+      <div class="d" style="margin-top:12px">Fund: General</div>
+      <button class="mbtn">Give $${S.amount}</button>
+      <button class="mbtn ghost" style="margin-top:8px">Make it monthly</button>
+    </div>
+    <div class="mcard tint">
+      <div class="lbl">Your giving this year</div>
+      <div class="t mono" style="font-size:22px">$675</div>
+      <div class="d">Statement ready any time, no email to the office.</div>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Recent</div>
+      <div class="d" style="margin-top:8px">July 25 · $75 · General<br>June 27 · $75 · General<br>May 30 · $75 · General</div>
+    </div>
+  </div>`;
+}
+function memberServe(){
+  return `<div class="mhead"><div class="hi">Serve</div><div class="sub">Grace Kids team</div></div>
+  <div class="mbody">
+    <div class="mcard tint">
+      <div class="lbl">Waiting on you</div>
+      <div class="t">Sunday, August 17 · 9:00am</div>
+      <div class="d">Grace Kids, 2s and 3s room with Dana Whitfield.</div>
+      <button class="mbtn">Accept</button>
+      <button class="mbtn ghost" style="margin-top:8px">Can't make it</button>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Your schedule</div>
+      <div class="d" style="margin-top:8px">Aug 17 · Grace Kids · 9:00am<br>Sep 7 · Grace Kids · 9:00am</div>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Before your first Sunday</div>
+      <div class="t">Kids team training</div>
+      <div class="d">2 short videos and a safety walkthrough. 14 minutes.</div>
+      <div class="prog"><i style="width:35%"></i></div>
+    </div>
+  </div>`;
+}
+function memberGrow(){
+  return `<div class="mhead"><div class="hi">Grow</div><div class="sub">Reading, notes, and prayer</div></div>
+  <div class="mbody">
+    <div class="mcard dark">
+      <div class="lbl">Continue</div>
+      <div class="t" style="color:#fff">Known · Day 3</div>
+      <div class="d" style="color:rgba(255,255,255,.7)">Psalm 139:1 to 12</div>
+      <div class="prog"><i style="width:60%"></i></div>
+      <button class="mbtn" style="margin-top:14px">Open today's reading</button>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Bible</div>
+      <div class="t">Search, highlight, and save</div>
+      <div class="d">Your highlights stay with you, and your notes stay private.</div>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Prayer journal</div>
+      <div class="t">3 entries this week</div>
+      <div class="d">Last: "For Marcus and Dana as they decide about the group."</div>
+    </div>
+    <div class="mcard tint">
+      <div class="lbl">From your pastor</div>
+      <div class="t">Money and faith, week 1</div>
+      <div class="d">A 4 week study written for Grace Community.</div>
+    </div>
+  </div>`;
+}
+function memberProfile(){
+  return `<div class="mhead"><div class="hi">Alicia Romero</div><div class="sub">Attender · 12 days</div></div>
+  <div class="mbody">
+    <div class="mcard">
+      <div class="lbl">Your journey</div>
+      <div class="journeymini" style="margin-top:12px">${STAGES.map((s,i)=>`<i class="${i<2?"on":i===2?"now":""}" style="${i<2?"background:var(--accent)":i===2?"background:var(--ink)":"background:var(--mist)"}"></i>`).join("")}</div>
+      <div class="d" style="margin-top:10px">Visitor and Guest complete. You are an Attender. Next: serving on a team.</div>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Family</div>
+      <div class="d" style="margin-top:8px">Alicia Romero<br>Sofia, age 4 · Grace Kids room 3</div>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Groups</div>
+      <div class="d" style="margin-top:8px">Wednesday Women's · Priya Anand leads</div>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Notifications</div>
+      <div class="d" style="margin-top:8px">Serving reminders on<br>Group messages on<br>Church announcements on</div>
+    </div>
+  </div>`;
+}
+function memberView(){
+  const tabs = [["home","Home",IC.home],["give","Give",IC.give],["serve","Serve",IC.hand],["grow","Grow",IC.grow],["profile","You",IC.user]];
+  const body = {home:memberHome,give:memberGive,serve:memberServe,grow:memberGrow,profile:memberProfile}[S.memberTab]();
+  return `<div class="memberwrap">
+    <div class="phone">
+      <div class="screen">
+        <div class="status"><span>9:41</span><span>${CHURCHES[S.church].short}</span></div>
+        ${body}
+        <div class="tabbar">${tabs.map(t=>`<button class="tab" data-mtab="${t[0]}" aria-current="${S.memberTab===t[0]}">${t[2]}<span>${t[1]}</span></button>`).join("")}</div>
+      </div>
+    </div>
+    <div class="track">
+      <section class="card">
+        <div class="hd"><h2>What the pastor is looking at</h2></div>
+        <div class="bd">This is the same database as the staff view. Alicia's next step, her group, and her giving are one record. The church's logo and color are on the app in the store. Ours is nowhere on it.</div>
+      </section>
+      <section class="card">
+        <div class="hd"><h2>What it replaces on their phone</h2></div>
+        <div class="bd" style="padding-bottom:8px">Four apps become one.</div>
+        ${[["Bible app","Reading, plans, highlights, notes"],["Giving page","One time and recurring, statements"],["Church Center","Serving, groups, check in"],["Group text threads","Team and group messages"]].map(r=>`<div class="row"><span class="av">${initials(r[0])}</span><span><span class="rn">${r[0]}</span><span class="rs">${r[1]}</span></span></div>`).join("")}
+      </section>
+    </div>
+  </div>`;
+}
+
+/* ============================ TALK TRACK ============================ */
+function talkPanel(){
+  if(!S.talk) return "";
+  return `<div class="scrim on" data-close-talk></div>
+  <aside class="drawer on" role="dialog" aria-label="Talk track" style="width:400px">
+    <div class="dhead">
+      <div class="top"><div><h3>Demo talk track</h3><div class="s">Six beats, about 9 minutes</div></div><button class="x" data-close-talk aria-label="Close">×</button></div>
+    </div>
+    <div class="dbody">
+      ${TALK_BEATS.map(b=>`<div class="beat"><span class="n">${b.n}</span><span><span class="w">${b.w}</span><span class="s" style="display:block">${b.s}</span></span></div>`).join("")}
+      <div class="dsec" style="border-bottom:none">
+        <h4>Close</h4>
+        <p style="font-size:13px;color:var(--muted);line-height:1.55;margin:0">"You are already paying for four systems that do not talk to each other, and none of them tell you who is stuck. This is one system, your brand, one hundred dollars a month. Do you want to start with your guest follow up or your groups?"</p>
+      </div>
+    </div>
+  </aside>`;
+}
+
+/* ============================ DRAWER ============================ */
+function openPerson(id){
+  const p = PEOPLE.find(x=>x.id===id); if(!p) return;
+  $("drawer").innerHTML = `
+    <div class="dhead">
+      <div class="top">
+        <span class="av">${initials(p.n)}</span>
+        <div><h3>${p.n}</h3><div class="s">${STAGES[p.stage]} since ${p.since} · ${p.days} days</div></div>
+        <button class="x" data-close aria-label="Close">×</button>
+      </div>
+      <div class="journeymini">${STAGES.map((s,i)=>`<i class="${i<p.stage?"on":i===p.stage?"now":""}"></i>`).join("")}</div>
+    </div>
+    <div class="dbody">
+      ${p.flag?`<div class="dsec"><div class="alert"><div><div class="t">Stuck in ${STAGES[p.stage]}</div><div class="d">${p.flag}</div></div></div></div>`:""}
+      <div class="dsec">
+        <h4>The recommended next step</h4>
+        <div style="font-size:14px;font-weight:500">${p.next}</div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="mini" style="border-color:var(--accent);color:var(--accent)">Assign to a person</button>
+          <button class="mini">Send it now</button>
+        </div>
+      </div>
+      <div class="dsec">
+        <h4>Snapshot</h4>
+        <div class="kv"><span>Family</span><b>${p.family}</b></div>
+        <div class="kv"><span>Giving</span><b>${p.give}</b></div>
+        <div class="kv"><span>Serving</span><b>${p.serve}</b></div>
+        <div class="kv"><span>Group</span><b>${p.group}</b></div>
+        <div class="kv"><span>Last contact</span><b>${p.last}</b></div>
+      </div>
+      <div class="dsec" style="border-bottom:none">
+        <h4>Timeline</h4>
+        <div class="tl">${p.tl.map(t=>`<div class="tli ${t.hi?"hi":""}"><div class="w">${t.w}</div><div class="d">${t.d}</div></div>`).join("")}</div>
+      </div>
+    </div>
+    <div class="dfoot">
+      <button class="btn" style="flex:1">Log a conversation</button>
+      <button class="btn sec" data-close>Close</button>
+    </div>`;
+  $("drawer").classList.add("on"); $("scrim").classList.add("on");
+  const x = $("drawer").querySelector("[data-close]"); if(x) x.focus();
+}
+function closeDrawer(){ $("drawer").classList.remove("on"); $("scrim").classList.remove("on"); }
+
+/* ============================ RENDER ============================ */
+function render(){
+  setAccent();
+  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel();
+  $("viewStaff").setAttribute("aria-selected", S.view==="staff");
+  $("viewMember").setAttribute("aria-selected", S.view==="member");
+  const q = $("q"); if(q && S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); }
+}
+
+document.addEventListener("click", e=>{
+  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-color],[data-amt],.toggle");
+  if(!t) return;
+  if(t.hasAttribute("data-close")){ closeDrawer(); return; }
+  if(t.hasAttribute("data-close-talk")){ S.talk=false; render(); return; }
+  if(t.dataset.tab){ S.tab=t.dataset.tab; S.stageFilter=null; render(); return; }
+  if(t.dataset.stage!==undefined){
+    const v = t.dataset.stage;
+    S.stageFilter = (v==="all") ? null : (S.stageFilter===+v ? null : +v);
+    if(S.tab!=="people" && v!=="all") S.tab="people";
+    render(); return;
+  }
+  if(t.dataset.person){ openPerson(+t.dataset.person); return; }
+  if(t.dataset.mtab){ S.memberTab=t.dataset.mtab; render(); return; }
+  if(t.dataset.color){ CHURCHES[S.church].accent=t.dataset.color; render(); return; }
+  if(t.dataset.amt){ S.amount=+t.dataset.amt; render(); return; }
+  if(t.classList.contains("toggle")){ t.setAttribute("aria-pressed", t.getAttribute("aria-pressed")!=="true"); return; }
+});
+document.addEventListener("input", e=>{ if(e.target.id==="q"){ S.q=e.target.value; render(); } });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape"){ closeDrawer(); if(S.talk){S.talk=false;render();} } });
+$("scrim").addEventListener("click", closeDrawer);
+$("viewStaff").addEventListener("click", ()=>{S.view="staff";render()});
+$("viewMember").addEventListener("click", ()=>{S.view="member";render()});
+$("talkBtn").addEventListener("click", ()=>{S.talk=!S.talk;render()});
+$("churchSel").addEventListener("change", e=>{S.church=+e.target.value;render()});
+
+render();
+</script>
+</body>
+</html>
