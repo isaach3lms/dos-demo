@@ -297,18 +297,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   <div class="brandmark"><span class="dot"></span> Discipleship Operating System</div>
   <span class="tag">Client demo</span>
   <div class="spacer"></div>
-  <div class="picker">
-    <label for="churchSel">Church</label>
-    <select id="churchSel">
-      <option value="0">Between Sundays</option>
-      <option value="1">Riverbend Fellowship</option>
-    </select>
-  </div>
   <div class="seg" role="tablist" aria-label="View">
     <button role="tab" id="viewStaff" aria-selected="true">Staff view</button>
     <button role="tab" id="viewMember" aria-selected="false">Member app</button>
   </div>
-  <button class="ghostbtn" id="talkBtn">Talk track</button>
 </div>
 
 <div id="app"></div>
@@ -932,12 +924,15 @@ document.addEventListener("click", e=>{
   if(t.classList.contains("toggle")){ t.setAttribute("aria-pressed", t.getAttribute("aria-pressed")!=="true"); return; }
 });
 document.addEventListener("input", e=>{ if(e.target.id==="q"){ S.q=e.target.value; render(); } });
-document.addEventListener("keydown", e=>{ if(e.key==="Escape"){ closeDrawer(); if(S.talk){S.talk=false;render();} } });
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){ closeDrawer(); if(S.talk){S.talk=false;render();} return; }
+  if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA") return;
+  if(e.key==="t"||e.key==="T"){ S.talk=!S.talk; render(); }           // hidden: talk track
+  if(e.key==="c"||e.key==="C"){ S.church=(S.church+1)%CHURCHES.length; render(); } // hidden: switch client brand
+});
 $("scrim").addEventListener("click", closeDrawer);
 $("viewStaff").addEventListener("click", ()=>{S.view="staff";render()});
 $("viewMember").addEventListener("click", ()=>{S.view="member";render()});
-$("talkBtn").addEventListener("click", ()=>{S.talk=!S.talk;render()});
-$("churchSel").addEventListener("change", e=>{S.church=+e.target.value;render()});
 
 render();
 </script>
