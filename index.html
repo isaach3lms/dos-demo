@@ -268,6 +268,47 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 
 .emptynote{padding:26px 18px;text-align:center;color:var(--muted);font-size:13px}
 
+/* ---------- Service planner ---------- */
+.weekstrip{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 6px}
+.week{
+  flex:none;min-width:150px;text-align:left;background:#fff;border:1px solid var(--line-soft);
+  border-radius:var(--r);padding:12px 14px;box-shadow:var(--shadow-sm);
+}
+.week:hover{border-color:var(--line)}
+.week[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,255,.16)}
+.week .wd{font-size:11px;color:var(--muted-2);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.week .wt{font-size:13.5px;font-weight:600;margin-top:4px;letter-spacing:-.01em;line-height:1.3}
+.week .wm{font-size:11.5px;color:var(--muted);margin-top:5px}
+.week .wp{margin-top:8px}
+.el{display:flex;align-items:center;gap:12px;padding:10px 18px;border-top:1px solid var(--line-soft)}
+.el:hover{background:#FAFBFF}
+.el .t{width:52px;flex:none;font-size:12px;color:var(--muted)}
+.el .body{flex:1;min-width:0}
+.el .ti{font-size:13.5px;font-weight:500;display:block}
+.el .su{font-size:11.5px;color:var(--muted);margin-top:1px;display:block}
+.el .dur{width:56px;text-align:right;font-size:12px;color:var(--muted)}
+.acts{display:flex;gap:4px;opacity:0;transition:opacity .15s ease}
+.el:hover .acts,.el:focus-within .acts{opacity:1}
+.iconbtn{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;color:var(--muted);line-height:1}
+.iconbtn:hover{background:var(--mist);color:var(--ink);border-color:var(--accent)}
+.iconbtn.danger:hover{background:var(--flag-bg);color:var(--flag);border-color:rgba(180,83,9,.3)}
+.addel{display:flex;gap:9px;padding:13px 18px;border-top:1px dashed var(--line);background:#FAFBFF;flex-wrap:wrap;align-items:center}
+.addel .mini{white-space:nowrap}
+.song{display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--line-soft);flex-wrap:wrap}
+.song .sb{flex:1;min-width:190px}
+.song .st{font-size:13.5px;font-weight:500;display:block}
+.song .sa{font-size:11.5px;color:var(--muted);margin-top:1px;display:block}
+.keysel{font-family:inherit;font-size:12px;font-weight:600;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:#fff}
+.chartlinks{display:flex;gap:6px;flex-wrap:wrap}
+.chartbtn{font-size:11.5px;font-weight:500;color:var(--navy);background:var(--mist);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:5px}
+.chartbtn:hover{background:var(--accent);color:#fff}
+.conn{display:flex;align-items:center;gap:13px;padding:14px 18px;background:#FAFBFF;border-top:1px solid var(--line-soft)}
+.conn .logo{width:38px;height:38px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;letter-spacing:.02em;flex:none}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:95;
+  background:var(--ink);color:#fff;font-size:13px;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow-lg);
+}
+
 /* ---------- Support modal ---------- */
 .modalwrap{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:24px}
 .modalwrap .mscrim{position:absolute;inset:0;background:rgba(11,16,38,.5)}
@@ -406,6 +447,57 @@ const PEOPLE = [
    next:"Fall group launch planning"}
 ];
 
+/* ---- Service planning ---- */
+const ELEMENT_TYPES = ["Welcome","Worship","Announcements","Giving","Message","Response","Prayer","Video","Transition","Dismissal"];
+
+let SERVICES = [
+  {id:"s1", date:"Sunday, August 9", short:"Aug 9", series:"Known, week 2", start:"9:00", status:"Ready", filled:[18,21],
+   elements:[
+     {id:11, type:"Welcome", title:"Countdown and welcome", owner:"Media: Josh", mins:4},
+     {id:12, type:"Worship", title:"Worship set, 3 songs", owner:"Worship: Hannah Doyle", mins:18},
+     {id:13, type:"Announcements", title:"Announcements and giving", owner:"Host: Pastor Reed", mins:5},
+     {id:14, type:"Message", title:"Message: Known, week 2", owner:"Pastor Reed", mins:25},
+     {id:15, type:"Response", title:"Response and next steps", owner:"Team: Priya, Dana", mins:8},
+     {id:16, type:"Dismissal", title:"Dismiss and lobby follow up", owner:"Guest team", mins:5}
+   ],
+   songs:[
+     {id:"a1", title:"Great Is Thy Faithfulness", author:"Chisholm, Runyan", key:"G", bpm:72},
+     {id:"a2", title:"Cornerstone", author:"Hillsong Worship", key:"C", bpm:74},
+     {id:"a3", title:"Goodness of God", author:"Bethel Music", key:"Ab", bpm:63}
+   ]},
+  {id:"s2", date:"Sunday, August 16", short:"Aug 16", series:"Known, week 3", start:"9:00", status:"Draft", filled:[12,21],
+   elements:[
+     {id:21, type:"Welcome", title:"Countdown and welcome", owner:"Media: unassigned", mins:4},
+     {id:22, type:"Worship", title:"Worship set, 4 songs", owner:"Worship: unassigned", mins:22},
+     {id:23, type:"Message", title:"Message: Known, week 3", owner:"Pastor Reed", mins:25},
+     {id:24, type:"Response", title:"Baptism response", owner:"Team: Grace Mbeki", mins:12},
+     {id:25, type:"Dismissal", title:"Dismiss and lobby follow up", owner:"Guest team", mins:5}
+   ],
+   songs:[
+     {id:"b1", title:"Build My Life", author:"Housefires", key:"G", bpm:70},
+     {id:"b2", title:"Christ Our Hope In Life And Death", author:"Keith and Kristyn Getty", key:"D", bpm:76},
+     {id:"b3", title:"O Come To The Altar", author:"Elevation Worship", key:"B", bpm:70}
+   ]},
+  {id:"s3", date:"Sunday, August 23", short:"Aug 23", series:"Known, week 4", start:"9:00", status:"Needs team", filled:[6,21],
+   elements:[
+     {id:31, type:"Welcome", title:"Countdown and welcome", owner:"Media: unassigned", mins:4},
+     {id:32, type:"Worship", title:"Worship set, 3 songs", owner:"Worship: unassigned", mins:18},
+     {id:33, type:"Message", title:"Message: Known, week 4", owner:"Guest speaker, to confirm", mins:28},
+     {id:34, type:"Dismissal", title:"Dismiss and lobby follow up", owner:"Guest team", mins:5}
+   ],
+   songs:[
+     {id:"c1", title:"How Great Thou Art", author:"Boberg, Hine", key:"Bb", bpm:68},
+     {id:"c2", title:"King Of Kings", author:"Hillsong Worship", key:"D", bpm:72}
+   ]},
+  {id:"s4", date:"Sunday, August 30", short:"Aug 30", series:"New series, untitled", start:"9:00", status:"Draft", filled:[2,21],
+   elements:[
+     {id:41, type:"Welcome", title:"Countdown and welcome", owner:"Media: unassigned", mins:4},
+     {id:42, type:"Worship", title:"Worship set, to plan", owner:"Worship: unassigned", mins:20},
+     {id:43, type:"Message", title:"Message: series launch", owner:"Pastor Reed", mins:30}
+   ],
+   songs:[]}
+];
+
 const TALK_BEATS = [
   {n:"01", w:"Open on the Journey, not the features", s:"Point at the rail. Ask the pastor to guess how many people are stuck between Guest and Attender. They will not know. That is the sale."},
   {n:"02", w:"Click a red flag", s:"Open Marcus Webb. Show 43 days as a Guest with no contact in 3 weeks. Say: this person is already leaving and nobody knows it yet."},
@@ -432,7 +524,7 @@ const IC = {
 };
 
 /* ============================ STATE ============================ */
-const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false};
+const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null};
 const $ = id => document.getElementById(id);
 const app = $("app");
 const initials = n => n.split(/[\s]+/).filter(w=>w[0]&&/[A-Za-z]/.test(w[0])).slice(0,2).map(w=>w[0].toUpperCase()).join("");
@@ -599,17 +691,116 @@ function peopleView(){
   </section>`;
 }
 
-function servicesView(){
-  const order = [["9:00","Countdown and welcome","Media: Josh"],["9:04","Worship set, 3 songs","Worship: Hannah D."],["9:22","Announcements and giving","Host: Pastor Reed"],["9:27","Message: Known, week 2","Pastor Reed"],["9:52","Response and next steps","Team: Priya, Dana"],["10:00","Dismiss and lobby follow up","Guest team"]];
+function svc(){ return SERVICES.find(x=>x.id===S.service) || SERVICES[0]; }
+
+function timesFor(sv){
+  const [h,m] = sv.start.split(":").map(Number);
+  let t = h*60+m; const out=[];
+  sv.elements.forEach(el=>{ out.push(t); t += Number(el.mins)||0; });
+  out.push(t);
+  return out.map(mins=>{
+    let hh = Math.floor(mins/60), mm = mins%60;
+    const suffix = hh>=12 ? "pm" : "am";
+    let disp = hh%12; if(disp===0) disp=12;
+    return `${disp}:${String(mm).padStart(2,"0")}`;
+  });
+}
+
+function weekStrip(){
   return `<section class="card">
-    <div class="hd"><h2>Sunday, August 9 · 9:00 service</h2><div class="spacer"></div><span class="pill good">18 of 21 roles filled</span></div>
-    <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">Run sheet, team, and songs in one place. Volunteers see only their part in the member app.</div>
-    ${order.map(o=>`<div class="row"><span class="mono" style="width:52px;font-size:12px;color:var(--muted)">${o[0]}</span><span><span class="rn">${o[1]}</span><span class="rs">${o[2]}</span></span></div>`).join("")}
-  </section>
-  <section class="card">
-    <div class="hd"><h2>Open roles</h2><div class="spacer"></div><button class="mini">Send requests</button></div>
-    ${[["Kids, 2s and 3s","2 open","Dana suggested 3 people"],["Parking team","1 open","No suggestions yet"]].map(r=>`<div class="row"><span class="av">!</span><span><span class="rn">${r[0]}</span><span class="rs">${r[2]}</span></span><span class="spacer"></span><span class="pill warn">${r[1]}</span></div>`).join("")}
+    <div class="hd"><h2>Plan ahead</h2><div class="spacer"></div>
+      <span class="pill ghost">${SERVICES.length} services scheduled</span></div>
+    <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">Plan weeks out, not the night before. Click a Sunday to open its plan.</div>
+    <div class="bd" style="padding-top:0">
+      <div class="weekstrip">
+        ${SERVICES.map(sv=>`
+          <button class="week" data-svc="${sv.id}" aria-pressed="${S.service===sv.id}">
+            <div class="wd">${sv.short}</div>
+            <div class="wt">${sv.series}</div>
+            <div class="wm">${sv.filled[0]} of ${sv.filled[1]} roles</div>
+            <div class="wp"><span class="pill ${sv.status==="Ready"?"good":sv.status==="Needs team"?"warn":""}">${sv.status}</span></div>
+          </button>`).join("")}
+        <button class="week" data-newsvc style="display:grid;place-items:center;min-width:120px;border-style:dashed;color:var(--muted)">
+          <span style="font-size:20px;line-height:1">+</span><span style="font-size:12px;font-weight:500">Add a Sunday</span>
+        </button>
+      </div>
+    </div>
   </section>`;
+}
+
+function planEditor(){
+  const sv = svc(); const t = timesFor(sv);
+  return `<section class="card">
+    <div class="hd"><h2>${sv.date} · ${sv.start} service</h2><div class="spacer"></div>
+      <span class="pill ${sv.filled[0]===sv.filled[1]?"good":"warn"}">${sv.filled[0]} of ${sv.filled[1]} roles filled</span></div>
+    <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">
+      ${sv.series} · ends at ${t[t.length-1]}. Edit any element and every time after it recalculates.
+    </div>
+    ${sv.elements.map((el,i)=>`
+      <div class="el">
+        <span class="t mono">${t[i]}</span>
+        <span class="body"><span class="ti">${el.title}</span><span class="su">${el.type} · ${el.owner}</span></span>
+        <span class="dur mono">${el.mins} min</span>
+        <span class="acts">
+          <button class="iconbtn" data-move="${el.id}" data-dir="-1" aria-label="Move up" ${i===0?"disabled style=opacity:.3":""}>&#9650;</button>
+          <button class="iconbtn" data-move="${el.id}" data-dir="1" aria-label="Move down" ${i===sv.elements.length-1?"disabled style=opacity:.3":""}>&#9660;</button>
+          <button class="iconbtn" data-editel="${el.id}" aria-label="Edit">&#9998;</button>
+          <button class="iconbtn danger" data-delel="${el.id}" aria-label="Delete">&times;</button>
+        </span>
+      </div>`).join("")}
+    <div class="addel">
+      <button class="mini" data-editel="new" style="border-color:var(--accent);color:var(--accent)">Add an element</button>
+      <button class="mini" data-copylast>Copy last Sunday's plan</button>
+      <button class="mini" data-sendplan>Send plan to the team</button>
+    </div>
+  </section>`;
+}
+
+function songSection(){
+  const sv = svc();
+  return `<section class="card">
+    <div class="hd"><h2>Songs for ${sv.short}</h2><div class="spacer"></div>
+      <button class="mini" data-addsong>Add from SongSelect</button></div>
+    <div class="conn">
+      <span class="logo">CCLI</span>
+      <span style="flex:1"><span class="rn">SongSelect connected</span><span class="rs">CCLI license on file · charts and sheet music open in SongSelect for anyone on the worship team</span></span>
+      <span class="pill good">Active</span>
+    </div>
+    ${sv.songs.length ? sv.songs.map(sg=>`
+      <div class="song">
+        <span class="sb"><span class="st">${sg.title}</span><span class="sa">${sg.author} · ${sg.bpm} bpm</span></span>
+        <label style="font-size:11px;color:var(--muted-2);font-weight:600;letter-spacing:.08em">KEY</label>
+        <select class="keysel" data-key="${sg.id}">
+          ${["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"].map(k=>`<option ${k===sg.key?"selected":""}>${k}</option>`).join("")}
+        </select>
+        <span class="chartlinks">
+          <button class="chartbtn" data-chart="${sg.id}|Chord chart">Chord chart</button>
+          <button class="chartbtn" data-chart="${sg.id}|Lead sheet">Lead sheet</button>
+          <button class="chartbtn" data-chart="${sg.id}|Vocal sheet">Vocal sheet</button>
+        </span>
+      </div>`).join("") : `<div class="emptynote">No songs picked for this Sunday yet.</div>`}
+    <div class="addel">
+      <button class="mini" data-sendset style="border-color:var(--accent);color:var(--accent)">Send the set to the worship team</button>
+      <span style="font-size:11.5px;color:var(--muted-2);align-self:center">Transposing a key here changes what the team sees in their app.</span>
+    </div>
+  </section>`;
+}
+
+function servicesView(){
+  return `${weekStrip()}
+  <div class="grid-2" style="grid-template-columns:1.25fr .9fr">
+    <div style="display:grid;gap:18px">${planEditor()}${songSection()}</div>
+    <div style="display:grid;gap:18px">
+      <section class="card">
+        <div class="hd"><h2>Open roles</h2><div class="spacer"></div><button class="mini" data-sendreq>Send requests</button></div>
+        ${[["Kids, 2s and 3s","2 open","Dana suggested 3 people"],["Parking team","1 open","No suggestions yet"],["Media, August 16","1 open","Josh is out that Sunday"]].map(r=>`<div class="row"><span class="av">!</span><span><span class="rn">${r[0]}</span><span class="rs">${r[2]}</span></span><span class="spacer"></span><span class="pill warn">${r[1]}</span></div>`).join("")}
+      </section>
+      <section class="card">
+        <div class="hd"><h2>Worship team</h2><div class="spacer"></div><span class="pill">${svc().short}</span></div>
+        ${[["Hannah Doyle","Worship lead","Accepted"],["Marcus Webb","Acoustic","Invited"],["Priya Anand","Vocals","Accepted"],["Josh Miller","Media","Accepted"]].map(m=>`<div class="row"><span class="av">${initials(m[0])}</span><span><span class="rn">${m[0]}</span><span class="rs">${m[1]}</span></span><span class="spacer"></span><span class="pill ${m[2]==="Accepted"?"good":"ghost"}">${m[2]}</span></div>`).join("")}
+      </section>
+    </div>
+  </div>`;
 }
 
 function kidsView(){
@@ -714,7 +905,9 @@ function staffView(){
         <button class="btn sec">Search</button>
         ${S.tab==="dashboard"
           ? `<button class="btn" data-support>Request support</button>`
-          : `<button class="btn">${PRIMARY_ACTION[S.tab] || "Add a person"}</button>`}
+          : S.tab==="services"
+            ? `<button class="btn" data-newsvc>New Service</button>`
+            : `<button class="btn">${PRIMARY_ACTION[S.tab] || "Add a person"}</button>`}
       </div>
       <div class="content">${body}</div>
     </main>
@@ -791,6 +984,12 @@ function memberServe(){
     <div class="mcard">
       <div class="lbl">Your schedule</div>
       <div class="d" style="margin-top:8px">Aug 17 · Kids · 9:00am<br>Sep 7 · Kids · 9:00am</div>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Sunday set</div>
+      <div class="t">3 songs · Aug 17</div>
+      <div class="d">Great Is Thy Faithfulness in G, Cornerstone in C, Goodness of God in Ab.</div>
+      <button class="mbtn ghost">Open charts in SongSelect</button>
     </div>
     <div class="mcard">
       <div class="lbl">Before your first Sunday</div>
@@ -891,6 +1090,105 @@ function talkPanel(){
     </div>
   </aside>`;
 }
+
+/* ============================ SERVICE EDITOR ============================ */
+function elementModal(){
+  if(!S.editEl) return "";
+  const sv = svc();
+  const isNew = S.editEl==="new";
+  const el = isNew ? {type:"Worship", title:"", owner:"", mins:5} : sv.elements.find(x=>String(x.id)===String(S.editEl));
+  if(!el) return "";
+  return `<div class="modalwrap"><div class="mscrim" data-close-el></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Edit element">
+      <div class="mh">
+        <div><h3>${isNew?"Add an element":"Edit element"}</h3><div class="s">${sv.date} · times after this recalculate automatically</div></div>
+        <button class="x" data-close-el aria-label="Close">&times;</button>
+      </div>
+      <div class="mb">
+        <div class="field"><label for="el-type">Type</label>
+          <select id="el-type">${ELEMENT_TYPES.map(t=>`<option ${t===el.type?"selected":""}>${t}</option>`).join("")}</select></div>
+        <div class="field" id="f-eltitle"><label for="el-title">What happens</label><input id="el-title" value="${el.title.replace(/"/g,"&quot;")}" placeholder="Worship set, 3 songs"><span class="err">Give this element a name.</span></div>
+        <div class="field"><label for="el-owner">Who owns it</label><input id="el-owner" value="${el.owner.replace(/"/g,"&quot;")}" placeholder="Worship: Hannah Doyle"></div>
+        <div class="field"><label for="el-mins">Minutes</label><input id="el-mins" type="number" min="1" max="120" value="${el.mins}"></div>
+      </div>
+      <div class="mf">
+        <span class="note">Everyone on the team sees this update in their app</span>
+        <button class="btn sec" data-close-el>Cancel</button>
+        <button class="btn" data-save-el="${isNew?"new":el.id}">Save</button>
+      </div>
+    </div></div>`;
+}
+
+function saveElement(){
+  const sv = svc();
+  const g = id => document.getElementById(id);
+  const title = (g("el-title").value||"").trim();
+  if(!title){ document.getElementById("f-eltitle").classList.add("bad"); return; }
+  const data = {type:g("el-type").value, title, owner:(g("el-owner").value||"").trim()||"Unassigned", mins:Math.max(1, Number(g("el-mins").value)||5)};
+  if(S.editEl==="new"){
+    sv.elements.push({id:Date.now(), ...data});
+  } else {
+    const el = sv.elements.find(x=>String(x.id)===String(S.editEl));
+    Object.assign(el, data);
+  }
+  S.editEl=null; toast("Plan updated. The team sees it now."); render();
+}
+
+function moveElement(id, dir){
+  const sv = svc(); const i = sv.elements.findIndex(x=>String(x.id)===String(id));
+  const j = i+dir; if(i<0||j<0||j>=sv.elements.length) return;
+  [sv.elements[i], sv.elements[j]] = [sv.elements[j], sv.elements[i]];
+  render();
+}
+
+function addService(){
+  const last = SERVICES[SERVICES.length-1];
+  const m = last.date.match(/([A-Za-z]+) (\d+)/);
+  const d = new Date(`${m[1]} ${m[2]}, 2026`); d.setDate(d.getDate()+7);
+  const date = d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+  const short = d.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+  const id = "s"+(SERVICES.length+1);
+  SERVICES.push({id, date, short, series:"Untitled plan", start:"9:00", status:"Draft", filled:[0,21],
+    elements:[{id:Date.now(), type:"Welcome", title:"Countdown and welcome", owner:"Unassigned", mins:4}], songs:[]});
+  S.service=id; toast(`${short} added. Plan it now or copy last Sunday.`); render();
+}
+
+function copyLastPlan(){
+  const sv = svc(); const i = SERVICES.findIndex(x=>x.id===sv.id);
+  const src = SERVICES[i-1] || SERVICES[i+1];
+  if(!src){ toast("No other Sunday to copy from."); return; }
+  sv.elements = src.elements.map(e=>({...e, id:Date.now()+Math.random()}));
+  sv.songs = src.songs.map(g=>({...g}));
+  toast(`Copied the ${src.short} plan. Edit anything that changed.`); render();
+}
+
+function chartModal(){
+  if(!S.songModal) return "";
+  const [sid, kind] = S.songModal.split("|");
+  const sg = svc().songs.find(x=>x.id===sid); if(!sg) return "";
+  return `<div class="modalwrap"><div class="mscrim" data-close-song></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Open in SongSelect" style="max-width:420px">
+      <div class="mh"><div><h3>${kind}</h3><div class="s">${sg.title} · ${sg.author}</div></div>
+        <button class="x" data-close-song aria-label="Close">&times;</button></div>
+      <div class="mb">
+        <div class="kv"><span>Key for this Sunday</span><b>${sg.key}</b></div>
+        <div class="kv"><span>Tempo</span><b>${sg.bpm} bpm</b></div>
+        <div class="kv"><span>Format</span><b>${kind}</b></div>
+        <p style="font-size:12.5px;color:var(--muted);line-height:1.55;margin:6px 0 0">
+          Charts and sheet music open in SongSelect under your church's CCLI license, transposed to ${sg.key}.
+          Licensed music stays with CCLI. We pass your team straight to it and keep the key, the set, and the schedule in one place.
+        </p>
+      </div>
+      <div class="mf">
+        <span class="note">Worship team members see this in their app</span>
+        <button class="btn sec" data-close-song>Close</button>
+        <button class="btn" data-close-song>Open in SongSelect</button>
+      </div>
+    </div></div>`;
+}
+
+function toast(msg){ S.toast = msg; clearTimeout(window.__t); window.__t = setTimeout(()=>{S.toast=null; render();}, 2600); }
+function toastEl(){ return S.toast ? `<div class="toast">${S.toast}</div>` : ""; }
 
 /* ============================ SUPPORT MODAL ============================ */
 function supportModal(){
@@ -1011,15 +1309,29 @@ function closeDrawer(){ $("drawer").classList.remove("on"); $("scrim").classList
 /* ============================ RENDER ============================ */
 function render(){
   setAccent();
-  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal();
+  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + toastEl();
   $("viewStaff").setAttribute("aria-selected", S.view==="staff");
   $("viewMember").setAttribute("aria-selected", S.view==="member");
   const q = $("q"); if(q && S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); }
 }
 
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],.toggle");
+  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],.toggle");
   if(!t) return;
+  if(t.dataset.svc){ S.service=t.dataset.svc; render(); return; }
+  if(t.hasAttribute("data-newsvc")){ addService(); return; }
+  if(t.dataset.editel){ S.editEl=t.dataset.editel; render(); document.getElementById("el-title")?.focus(); return; }
+  if(t.hasAttribute("data-close-el")){ S.editEl=null; render(); return; }
+  if(t.dataset.saveEl){ saveElement(); return; }
+  if(t.dataset.delel){ const sv=svc(); sv.elements=sv.elements.filter(x=>String(x.id)!==t.dataset.delel); toast("Element removed."); render(); return; }
+  if(t.dataset.move){ moveElement(t.dataset.move, Number(t.dataset.dir)); return; }
+  if(t.hasAttribute("data-copylast")){ copyLastPlan(); return; }
+  if(t.hasAttribute("data-sendplan")){ toast("Plan sent to 14 team members."); render(); return; }
+  if(t.hasAttribute("data-sendset")){ toast("Set sent. Charts open in SongSelect in each person's key."); render(); return; }
+  if(t.hasAttribute("data-sendreq")){ toast("Requests sent. Responses land in People."); render(); return; }
+  if(t.hasAttribute("data-addsong")){ toast("SongSelect search opens here in the live product."); render(); return; }
+  if(t.dataset.chart){ S.songModal=t.dataset.chart; render(); return; }
+  if(t.hasAttribute("data-close-song")){ S.songModal=null; render(); return; }
   if(t.hasAttribute("data-support")){ S.support=true; S.supportSent=false; render(); document.getElementById("sup-name")?.focus(); return; }
   if(t.hasAttribute("data-close-support")){ S.support=false; S.supportSent=false; render(); return; }
   if(t.hasAttribute("data-send-support")){ sendSupport(); return; }
@@ -1039,8 +1351,19 @@ document.addEventListener("click", e=>{
   if(t.classList.contains("toggle")){ t.setAttribute("aria-pressed", t.getAttribute("aria-pressed")!=="true"); return; }
 });
 document.addEventListener("input", e=>{ if(e.target.id==="q"){ S.q=e.target.value; render(); } });
+document.addEventListener("change", e=>{
+  const k = e.target.closest("[data-key]");
+  if(k){ const sg = svc().songs.find(x=>x.id===k.dataset.key); if(sg){ sg.key = k.value; toast(`${sg.title} moved to ${sg.key}. Charts follow the key.`); render(); } }
+});
 document.addEventListener("keydown", e=>{
-  if(e.key==="Escape"){ closeDrawer(); if(S.support){S.support=false;S.supportSent=false;render();return;} if(S.talk){S.talk=false;render();} return; }
+  if(e.key==="Escape"){
+    closeDrawer();
+    if(S.editEl){S.editEl=null;render();return;}
+    if(S.songModal){S.songModal=null;render();return;}
+    if(S.support){S.support=false;S.supportSent=false;render();return;}
+    if(S.talk){S.talk=false;render();}
+    return;
+  }
   if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA") return;
   if(e.key==="t"||e.key==="T"){ S.talk=!S.talk; render(); }           // hidden: talk track
   if(e.key==="c"||e.key==="C"){ S.church=(S.church+1)%CHURCHES.length; render(); } // hidden: switch client brand
