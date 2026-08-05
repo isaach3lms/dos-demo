@@ -309,6 +309,46 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   background:var(--ink);color:#fff;font-size:13px;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow-lg);
 }
 
+/* ---------- Check in kiosk ---------- */
+.kiosk{position:fixed;inset:0;z-index:100;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px;overflow-y:auto}
+.kiosk .exit{position:absolute;top:18px;right:20px;font-size:12.5px;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.18);padding:7px 13px;border-radius:9px}
+.kiosk .exit:hover{background:rgba(255,255,255,.09);color:#fff}
+.kiosk .brand{position:absolute;top:18px;left:22px;color:#fff;opacity:.85}
+.kiosk .brand svg.mark{width:112px;height:auto;display:block}
+.kcard{width:100%;max-width:600px;background:#fff;border-radius:24px;box-shadow:var(--shadow-lg);overflow:hidden}
+.kcard .kh{padding:26px 30px 8px;text-align:center}
+.kcard .kh h2{margin:0;font-size:25px;font-weight:600;letter-spacing:-.02em}
+.kcard .kh p{margin:7px 0 0;font-size:14px;color:var(--muted);line-height:1.5}
+.kcard .kb{padding:22px 30px 30px}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;max-width:330px;margin:0 auto}
+.pad button{height:62px;border-radius:15px;background:var(--mist);font-size:24px;font-weight:600;color:var(--navy);font-family:'IBM Plex Mono',monospace}
+.pad button:hover{background:var(--accent);color:#fff}
+.pad button.util{font-size:14px;font-family:inherit;background:#fff;border:1px solid var(--line);color:var(--muted)}
+.pad button.util:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.digits{display:flex;gap:12px;justify-content:center;margin:6px 0 22px}
+.digits i{width:52px;height:62px;border-radius:14px;border:2px solid var(--line);display:grid;place-items:center;font-size:26px;font-weight:600;font-family:'IBM Plex Mono',monospace;color:var(--ink)}
+.digits i.on{border-color:var(--accent);background:var(--mist)}
+.kidcard{display:flex;align-items:center;gap:15px;width:100%;text-align:left;padding:17px 18px;border:2px solid var(--line);border-radius:16px;margin-bottom:11px;background:#fff}
+.kidcard:hover{border-color:var(--accent)}
+.kidcard[aria-pressed="true"]{border-color:var(--accent);background:var(--mist)}
+.kidcard .kav{width:48px;height:48px;border-radius:14px;background:var(--mist);color:var(--navy);display:grid;place-items:center;font-size:16px;font-weight:600;flex:none}
+.kidcard[aria-pressed="true"] .kav{background:var(--accent);color:#fff}
+.kidcard .kn{font-size:16px;font-weight:600}
+.kidcard .kr{font-size:12.5px;color:var(--muted);margin-top:2px}
+.kidcard .check{margin-left:auto;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:transparent;font-size:13px;font-weight:700;flex:none}
+.kidcard[aria-pressed="true"] .check{background:var(--accent);border-color:var(--accent);color:#fff}
+.kbtn{width:100%;background:var(--accent);color:#fff;font-size:16px;font-weight:600;padding:16px;border-radius:15px;margin-top:8px}
+.kbtn:disabled{opacity:.35;cursor:not-allowed}
+.kbtn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink);font-weight:500;font-size:14px;padding:12px;margin-top:10px}
+.label{border:2px dashed var(--line);border-radius:16px;padding:18px;margin-bottom:12px}
+.label .lt{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.label .ln{font-size:19px;font-weight:600}
+.label .lc{font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:var(--accent);letter-spacing:.06em}
+.label .lr{font-size:12.5px;color:var(--muted);margin-top:4px}
+.label .la{margin-top:10px;display:inline-block}
+.kdone{text-align:center;padding:14px 0 4px}
+.kdone .tick{width:62px;height:62px;border-radius:50%;background:var(--good-bg);color:var(--good);display:grid;place-items:center;margin:0 auto 16px;font-size:29px;font-weight:600}
+
 /* ---------- Support modal ---------- */
 .modalwrap{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:24px}
 .modalwrap .mscrim{position:absolute;inset:0;background:rgba(11,16,38,.5)}
@@ -447,6 +487,19 @@ const PEOPLE = [
    next:"Fall group launch planning"}
 ];
 
+/* ---- Kids check in ---- */
+const KIOSK_FAMILIES = [
+  {pin:"4471", family:"Webb", guardian:"Marcus and Dana Webb",
+   kids:[{id:"k1",name:"Ellie Webb",age:5,room:"Room 2"},{id:"k2",name:"Grant Webb",age:3,room:"Room 1"}]},
+  {pin:"8802", family:"Nguyen", guardian:"Kevin and Thao Nguyen",
+   kids:[{id:"k3",name:"Mia Nguyen",age:6,room:"Room 4"}]},
+  {pin:"2210", family:"Whitfield", guardian:"Dana Whitfield",
+   kids:[{id:"k4",name:"Jonah Whitfield",age:4,room:"Room 3",alert:"Peanut allergy"}]},
+  {pin:"9134", family:"Romero", guardian:"Alicia Romero",
+   kids:[{id:"k5",name:"Sofia Romero",age:4,room:"Room 3"}]}
+];
+let KIOSK_LOG = [];
+
 /* ---- Service planning ---- */
 const ELEMENT_TYPES = ["Welcome","Worship","Announcements","Giving","Message","Response","Prayer","Video","Transition","Dismissal"];
 
@@ -524,7 +577,7 @@ const IC = {
 };
 
 /* ============================ STATE ============================ */
-const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null};
+const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null, kiosk:null};
 const $ = id => document.getElementById(id);
 const app = $("app");
 const initials = n => n.split(/[\s]+/).filter(w=>w[0]&&/[A-Za-z]/.test(w[0])).slice(0,2).map(w=>w[0].toUpperCase()).join("");
@@ -804,12 +857,28 @@ function servicesView(){
 }
 
 function kidsView(){
+  const base = [
+    {name:"Webb, Ellie and Grant", room:"Room 2 · pickup code 4471", guardian:"Marcus Webb"},
+    {name:"Nguyen, Mia", room:"Room 4 · pickup code 8802", guardian:"Thao Nguyen"},
+    {name:"Whitfield, Jonah", room:"Room 3 · allergy alert on file", guardian:"Dana Whitfield"}
+  ];
   return `<section class="card">
-    <div class="hd"><h2>Check in, last Sunday</h2><div class="spacer"></div><span class="pill">86 kids</span></div>
+    <div class="hd"><h2>Check in kiosk</h2><div class="spacer"></div><span class="pill good">Ready</span></div>
+    <div class="bd" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <div style="flex:1;min-width:220px;font-size:12.5px;color:var(--muted);line-height:1.5">
+        Open this on any tablet at the door. Parents enter the last four digits of their phone, tap who is here, and take a pickup tag. No volunteer required.
+      </div>
+      <button class="btn" data-kiosk-open>Open kiosk</button>
+    </div>
+  </section>
+  <section class="card">
+    <div class="hd"><h2>Checked in today</h2><div class="spacer"></div><span class="pill">${86 + KIOSK_LOG.length} kids</span></div>
     <div class="bd">${metrics_kids()}</div>
-    ${[["Webb, Ellie and Grant","Room 2 · pickup code 4471","Marcus Webb"],["Nguyen, Mia","Room 4 · pickup code 8802","Thao Nguyen"],["Whitfield, Jonah","Room 3 · allergy alert on file","Dana Whitfield"]].map(k=>`<div class="row"><span class="av">${initials(k[0].split(",")[1]||"K")}</span><span><span class="rn">${k[0]}</span><span class="rs">${k[1]}</span></span><span class="spacer"></span><span class="pill ghost">${k[2]}</span></div>`).join("")}
+    ${KIOSK_LOG.map(l=>`<div class="row"><span class="av solid">${initials(l.name)}</span><span><span class="rn">${l.name}</span><span class="rs">${l.room} · pickup code ${l.code} · ${l.when}${l.alert?` · ${l.alert}`:""}</span></span><span class="spacer"></span><span class="pill good">Just now</span></div>`).join("")}
+    ${base.map(k=>`<div class="row"><span class="av">${initials(k.name.split(",")[1]||"K")}</span><span><span class="rn">${k.name}</span><span class="rs">${k.room}</span></span><span class="spacer"></span><span class="pill ghost">${k.guardian}</span></div>`).join("")}
   </section>`;
 }
+
 function metrics_kids(){
   return `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
     ${[["Checked in","86"],["First time kids","7"],["Volunteers on duty","14"]].map(x=>`<div><div class="k" style="font-size:11px;color:var(--muted)">${x[0]}</div><div class="v mono" style="font-size:23px;font-weight:600;margin-top:4px">${x[1]}</div></div>`).join("")}
@@ -907,6 +976,8 @@ function staffView(){
           ? `<button class="btn" data-support>Request support</button>`
           : S.tab==="services"
             ? `<button class="btn" data-newsvc>New Service</button>`
+          : S.tab==="kids"
+            ? `<button class="btn sec" data-kiosk-open>Open kiosk</button><button class="btn">Add Child</button>`
             : `<button class="btn">${PRIMARY_ACTION[S.tab] || "Add a person"}</button>`}
       </div>
       <div class="content">${body}</div>
@@ -1089,6 +1160,122 @@ function talkPanel(){
       </div>
     </div>
   </aside>`;
+}
+
+/* ============================ CHECK IN KIOSK ============================ */
+function openKiosk(){ S.kiosk = {step:"pin", pin:"", fam:null, picked:[], code:null}; render(); }
+function kioskReset(){ S.kiosk = {step:"pin", pin:"", fam:null, picked:[], code:null}; render(); }
+
+function kioskPin(d){
+  const k = S.kiosk;
+  if(d==="del"){ k.pin = k.pin.slice(0,-1); render(); return; }
+  if(d==="clear"){ k.pin=""; render(); return; }
+  if(k.pin.length>=4) return;
+  k.pin += d;
+  if(k.pin.length===4){
+    const fam = KIOSK_FAMILIES.find(f=>f.pin===k.pin);
+    if(fam){ k.fam = fam; k.picked = fam.kids.map(x=>x.id); k.step="pick"; }
+    else { k.step="none"; }
+  }
+  render();
+}
+
+function kioskCheckIn(){
+  const k = S.kiosk;
+  k.code = String(Math.floor(1000+Math.random()*9000));
+  k.step = "label";
+  const when = new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+  k.fam.kids.filter(c=>k.picked.includes(c.id)).forEach(c=>{
+    KIOSK_LOG.unshift({name:c.name, room:c.room, code:k.code, guardian:k.fam.guardian, alert:c.alert, when});
+  });
+  render();
+}
+
+function kioskView(){
+  const k = S.kiosk; if(!k) return "";
+  const c = CHURCHES[S.church];
+  const chrome = `<div class="brand">${c.logo || `<span style="font-weight:600">${c.name}</span>`}</div>
+    <button class="exit" data-kiosk-exit>Exit kiosk</button>`;
+
+  if(k.step==="pin"){
+    return `<div class="kiosk">${chrome}
+      <div class="kcard">
+        <div class="kh"><h2>Welcome. Let's check in.</h2><p>Enter the last four digits of your phone number.</p></div>
+        <div class="kb">
+          <div class="digits">${[0,1,2,3].map(i=>`<i class="${k.pin[i]?"on":""}">${k.pin[i]||""}</i>`).join("")}</div>
+          <div class="pad">
+            ${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-pin="${n}">${n}</button>`).join("")}
+            <button class="util" data-pin="clear">Clear</button>
+            <button data-pin="0">0</button>
+            <button class="util" data-pin="del">Delete</button>
+          </div>
+          <button class="kbtn ghost" data-kiosk-new>First time here? Start a new family</button>
+        </div>
+      </div></div>`;
+  }
+
+  if(k.step==="none"){
+    return `<div class="kiosk">${chrome}
+      <div class="kcard">
+        <div class="kh"><h2>We did not find that number</h2><p>Check the digits, or start a new family and a volunteer will help you.</p></div>
+        <div class="kb">
+          <button class="kbtn" data-kiosk-again>Try again</button>
+          <button class="kbtn ghost" data-kiosk-new>Start a new family</button>
+        </div>
+      </div></div>`;
+  }
+
+  if(k.step==="new"){
+    return `<div class="kiosk">${chrome}
+      <div class="kcard">
+        <div class="kh"><h2>Welcome. We are glad you are here.</h2><p>A volunteer is on the way with a tablet to get your family set up. It takes about two minutes.</p></div>
+        <div class="kb">
+          <div class="label">
+            <div class="lt"><span class="ln">New family</span><span class="lc">${String(Math.floor(1000+Math.random()*9000))}</span></div>
+            <div class="lr">Guest services notified · someone is walking over now</div>
+          </div>
+          <button class="kbtn" data-kiosk-again>Back to start</button>
+        </div>
+      </div></div>`;
+  }
+
+  if(k.step==="pick"){
+    return `<div class="kiosk">${chrome}
+      <div class="kcard">
+        <div class="kh"><h2>Hi, ${k.fam.family} family</h2><p>Tap anyone who is checking in today.</p></div>
+        <div class="kb">
+          ${k.fam.kids.map(c2=>`
+            <button class="kidcard" data-kid="${c2.id}" aria-pressed="${k.picked.includes(c2.id)}">
+              <span class="kav">${initials(c2.name)}</span>
+              <span><span class="kn">${c2.name}</span><span class="kr">Age ${c2.age} · ${c2.room}${c2.alert?` · ${c2.alert}`:""}</span></span>
+              <span class="check">&#10003;</span>
+            </button>`).join("")}
+          <button class="kbtn" data-kiosk-go ${k.picked.length?"":"disabled"}>Check in ${k.picked.length} ${k.picked.length===1?"child":"children"}</button>
+          <button class="kbtn ghost" data-kiosk-again>Not us, start over</button>
+        </div>
+      </div></div>`;
+  }
+
+  if(k.step==="label"){
+    const kids = k.fam.kids.filter(x=>k.picked.includes(x.id));
+    return `<div class="kiosk">${chrome}
+      <div class="kcard">
+        <div class="kh"><h2>Checked in</h2><p>Take your pickup tag. Labels are printing now.</p></div>
+        <div class="kb">
+          ${kids.map(c3=>`
+            <div class="label">
+              <div class="lt"><span class="ln">${c3.name}</span><span class="lc">${k.code}</span></div>
+              <div class="lr">${c3.room} · ${k.fam.guardian}</div>
+              ${c3.alert?`<span class="pill warn la">${c3.alert}</span>`:""}
+            </div>`).join("")}
+          <p style="font-size:12.5px;color:var(--muted);line-height:1.5;margin:4px 0 0">
+            Nobody leaves with a child without code ${k.code}. Room leaders can text you from the app if they need you.
+          </p>
+          <button class="kbtn" data-kiosk-again>Done</button>
+        </div>
+      </div></div>`;
+  }
+  return "";
 }
 
 /* ============================ SERVICE EDITOR ============================ */
@@ -1309,15 +1496,26 @@ function closeDrawer(){ $("drawer").classList.remove("on"); $("scrim").classList
 /* ============================ RENDER ============================ */
 function render(){
   setAccent();
-  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + toastEl();
+  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + kioskView() + toastEl();
   $("viewStaff").setAttribute("aria-selected", S.view==="staff");
   $("viewMember").setAttribute("aria-selected", S.view==="member");
   const q = $("q"); if(q && S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); }
 }
 
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],.toggle");
+  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],[data-kiosk-open],[data-kiosk-exit],[data-kiosk-again],[data-kiosk-new],[data-kiosk-go],[data-pin],[data-kid],.toggle");
   if(!t) return;
+  if(t.hasAttribute("data-kiosk-open")){ openKiosk(); return; }
+  if(t.hasAttribute("data-kiosk-exit")){ S.kiosk=null; render(); return; }
+  if(t.hasAttribute("data-kiosk-again")){ kioskReset(); return; }
+  if(t.hasAttribute("data-kiosk-new")){ S.kiosk.step="new"; render(); return; }
+  if(t.hasAttribute("data-kiosk-go")){ kioskCheckIn(); return; }
+  if(t.dataset.pin){ kioskPin(t.dataset.pin); return; }
+  if(t.dataset.kid){
+    const k=S.kiosk; const id=t.dataset.kid;
+    k.picked = k.picked.includes(id) ? k.picked.filter(x=>x!==id) : k.picked.concat(id);
+    render(); return;
+  }
   if(t.dataset.svc){ S.service=t.dataset.svc; render(); return; }
   if(t.hasAttribute("data-newsvc")){ addService(); return; }
   if(t.dataset.editel){ S.editEl=t.dataset.editel; render(); document.getElementById("el-title")?.focus(); return; }
@@ -1358,6 +1556,7 @@ document.addEventListener("change", e=>{
 document.addEventListener("keydown", e=>{
   if(e.key==="Escape"){
     closeDrawer();
+    if(S.kiosk){S.kiosk=null;render();return;}
     if(S.editEl){S.editEl=null;render();return;}
     if(S.songModal){S.songModal=null;render();return;}
     if(S.support){S.support=false;S.supportSent=false;render();return;}
@@ -1365,6 +1564,11 @@ document.addEventListener("keydown", e=>{
     return;
   }
   if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA") return;
+  if(S.kiosk && S.kiosk.step==="pin"){
+    if(/^[0-9]$/.test(e.key)){ kioskPin(e.key); return; }
+    if(e.key==="Backspace"){ kioskPin("del"); return; }
+    return;
+  }
   if(e.key==="t"||e.key==="T"){ S.talk=!S.talk; render(); }           // hidden: talk track
   if(e.key==="c"||e.key==="C"){ S.church=(S.church+1)%CHURCHES.length; render(); } // hidden: switch client brand
 });
