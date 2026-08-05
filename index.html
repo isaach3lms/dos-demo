@@ -242,7 +242,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .streak i{flex:1;height:30px;border-radius:7px;background:var(--mist);display:grid;place-items:center;font-size:9.5px;font-weight:600;color:var(--muted-2)}
 .streak i.on{background:var(--accent);color:#fff}
 .tabbar{display:flex;border-top:1px solid var(--line-soft);padding:9px 6px 20px;background:#fff}
-.tab{flex:1;display:grid;gap:4px;justify-items:center;font-size:10px;font-weight:500;color:var(--muted-2);padding:5px 0}
+.tab{flex:1;min-width:0;display:grid;gap:4px;justify-items:center;font-size:9.5px;font-weight:500;color:var(--muted-2);padding:5px 0}
 .tab .ic{width:20px;height:20px}
 .tab[aria-current="true"]{color:var(--accent);font-weight:600}
 .amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
@@ -308,6 +308,50 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:95;
   background:var(--ink);color:#fff;font-size:13px;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow-lg);
 }
+
+/* ---------- Chat ---------- */
+.chatwrap{display:grid;grid-template-columns:252px 1fr;height:580px;border-top:1px solid var(--line-soft)}
+.chanrail{border-right:1px solid var(--line-soft);background:#FAFBFF;display:flex;flex-direction:column;overflow-y:auto}
+.chanlbl{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted-2);font-weight:600;padding:15px 16px 6px}
+.chanbtn{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:9px 14px;font-size:13px;color:var(--muted)}
+.chanbtn:hover{background:#F1F4FC;color:var(--ink)}
+.chanbtn[aria-current="true"]{background:var(--mist);color:var(--ink);font-weight:600}
+.chanbtn .ci{width:15px;height:15px;flex:none;opacity:.7}
+.chanbtn .nm2{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chanbtn .un{font-size:10.5px;font-weight:700;background:var(--accent);color:#fff;padding:1px 6px;border-radius:999px}
+.chanbtn .lock{font-size:11px;opacity:.5}
+.thread{display:flex;flex-direction:column;min-width:0}
+.thead{display:flex;align-items:center;gap:11px;padding:13px 18px;border-bottom:1px solid var(--line-soft)}
+.thead .tn{font-size:14.5px;font-weight:600}
+.thead .ts{font-size:11.5px;color:var(--muted);margin-top:1px}
+.msgs{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:13px}
+.msg{display:flex;gap:11px;max-width:78%}
+.msg .mv{width:31px;height:31px;border-radius:50%;background:var(--mist);color:var(--navy);display:grid;place-items:center;font-size:11px;font-weight:600;flex:none}
+.msg .mw{font-size:11.5px;color:var(--muted);margin-bottom:3px;display:block}
+.msg > span:not(.mv){display:block;min-width:0}
+.msg .bub{display:inline-block;max-width:100%;background:#fff;border:1px solid var(--line-soft);border-radius:4px 13px 13px 13px;padding:9px 13px;font-size:13.5px;line-height:1.5;box-shadow:var(--shadow-sm)}
+.msg.me{align-self:flex-end;flex-direction:row-reverse}
+.msg.me .bub{background:var(--accent);color:#fff;border-color:transparent;border-radius:13px 4px 13px 13px}
+.msg.me .mv{background:var(--accent);color:#fff}
+.msg.me .mw{text-align:right}
+.msg.sys{max-width:100%;align-self:center}
+.msg.sys .bub{background:var(--mist);border:none;font-size:12px;color:var(--navy);border-radius:999px;padding:5px 13px;box-shadow:none}
+.composer{display:flex;gap:9px;padding:12px 16px;min-width:0;border-top:1px solid var(--line-soft);background:#fff}
+.composer input{flex:1;min-width:0;font-family:inherit;font-size:13.5px;border:1px solid var(--line);border-radius:999px;padding:10px 16px;color:var(--ink)}
+.composer input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,255,.13)}
+.locked{padding:18px;text-align:center;font-size:12.5px;color:var(--muted);background:#FAFBFF;border-top:1px solid var(--line-soft)}
+.picklist{max-height:270px;overflow-y:auto;display:grid;gap:7px}
+.pickrow{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:9px 11px;border:1px solid var(--line);border-radius:11px}
+.pickrow:hover{border-color:var(--accent)}
+.pickrow[aria-pressed="true"]{border-color:var(--accent);background:var(--mist)}
+.mthread{display:flex;flex-direction:column;height:100%}
+.mback{font-size:12.5px;color:var(--accent);font-weight:500;padding:4px 0}
+.screen .composer{padding:10px 12px;gap:7px}
+.screen .composer input{padding:9px 13px;font-size:13px;min-width:0}
+.screen .composer .btn{padding:9px 14px;font-size:12.5px;flex:none}
+.screen .msgs{padding:6px 2px 10px}
+.screen .msg{max-width:90%}
+.screen .msg .bub{font-size:13px;padding:8px 11px}
 
 /* ---------- Resources ---------- */
 .resgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -455,8 +499,20 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   .phone{position:static}
   .track{position:static;width:100%;max-width:560px}
 }
+@media (max-width:1100px){
+  .resgrid{grid-template-columns:repeat(2,1fr)}
+}
 @media (max-width:900px){
-  .sidebar{display:none}
+  .shell{flex-direction:column}
+  .sidebar{width:100%;flex-direction:row;align-items:center;gap:6px;padding:10px 12px;overflow-x:auto}
+  .church,.navlbl,.sidefoot{display:none}
+  .nav{width:auto;flex:none;white-space:nowrap;padding:8px 12px}
+  .chatwrap{grid-template-columns:1fr;height:auto}
+  .chanrail{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--line-soft)}
+  .chanlbl{display:none}
+  .chanbtn{width:auto;flex:none;white-space:nowrap}
+  .msgs{height:330px}
+  .resgrid{grid-template-columns:1fr}
   .stages{grid-template-columns:repeat(4,1fr)}
   .stage .arrow{display:none}
 }
@@ -556,6 +612,60 @@ const PEOPLE = [
    tl:[{w:"Campus leadership team",d:"Since 2023"},{w:"Oversees 6 group leaders",d:"Ongoing"},{w:"Leading the fall launch",d:"Planned",hi:true}],
    next:"Fall group launch planning"}
 ];
+
+/* ---- Messaging ---- */
+let CHANNELS = [
+  {id:"all", name:"All Members", open:true, members:412, purpose:"Church wide announcements and prayer"},
+  {id:"worship", name:"Worship Team", open:false, members:14, purpose:"Sunday sets, rehearsal, and call times"},
+  {id:"youth", name:"Youth Team", open:false, members:19, purpose:"Wednesday night and student leaders"},
+  {id:"kids", name:"Kids Team", open:false, members:23, purpose:"Rooms, ratios, and safety"},
+  {id:"welcome", name:"Welcome Team", open:false, members:11, purpose:"Guest follow up and lobby coverage"}
+];
+let DMS = [
+  {id:"dm-hannah", name:"Hannah Doyle"},
+  {id:"dm-priya", name:"Priya Anand"},
+  {id:"dm-dana", name:"Dana Whitfield"}
+];
+let CHAT = {
+  all:[
+    {w:"Pastor Reed", t:"Sunday 7:02 AM", x:"Doors open at 8:30 this morning. Coffee is in the lobby, and Next Steps lunch signups are open through Wednesday."},
+    {w:"Priya Anand", t:"Sunday 9:41 AM", x:"Praying for the Barrett family this week. Thank you all."},
+    {w:"Grace Mbeki", t:"Monday 8:15 AM", x:"Fall group launch is September 14. Leaders, watch for a note in the Worship and Youth rooms."}
+  ],
+  worship:[
+    {w:"Hannah Doyle", t:"Tuesday 6:40 PM", x:"Set for Aug 9 is locked. Cornerstone moved to C, charts are in the app."},
+    {w:"Josh Miller", t:"Tuesday 6:52 PM", x:"Copy. I will have the slides built by Thursday."},
+    {w:"Pastor Reed", t:"Wednesday 7:12 AM", x:"Rehearsal Thursday at 7. Call time 8:15 Sunday."},
+    {w:"Marcus Webb", t:"Wednesday 9:03 AM", x:"First time on acoustic this week. Anything I should know?"}
+  ],
+  youth:[
+    {w:"Grace Mbeki", t:"Monday 4:20 PM", x:"22 students Wednesday. We need one more adult in the gym."},
+    {w:"Dana Whitfield", t:"Monday 4:31 PM", x:"I can cover it."}
+  ],
+  kids:[
+    {w:"Dana Whitfield", t:"Sunday 11:04 AM", x:"86 kids today, 7 first timers. Room 2 was at ratio all morning."},
+    {w:"Alicia Romero", t:"Monday 12:15 PM", x:"Background check submitted. Excited to start Aug 17."},
+    {w:"Dana Whitfield", t:"Monday 12:22 PM", x:"Welcome Alicia. I will walk you through the room before service."}
+  ],
+  welcome:[
+    {w:"Pastor Reed", t:"Sunday 12:40 PM", x:"Nine first time guests today. Follow up texts went out automatically."},
+    {w:"Priya Anand", t:"Sunday 1:02 PM", x:"I met the Brooks family. Second visit. They asked about groups."}
+  ],
+  "dm-hannah":[
+    {w:"Hannah Doyle", t:"Yesterday 5:12 PM", x:"Do you want the Known set repeated on the 16th or something new?"},
+    {w:"Pastor Reed", t:"Yesterday 5:20 PM", me:true, x:"Something new. Week 3 goes a different direction."}
+  ],
+  "dm-priya":[
+    {w:"Priya Anand", t:"Monday 8:02 AM", x:"Sam Ortiz still has not landed in a group. Want me to call him?"}
+  ],
+  "dm-dana":[
+    {w:"Dana Whitfield", t:"Friday 3:30 PM", x:"I would like to talk about leading a group in the fall."}
+  ]
+};
+let UNREAD = {worship:2, kids:1, "dm-priya":1};
+
+function chanById(id){ return CHANNELS.find(c=>c.id===id) || DMS.find(d=>d.id===id); }
+function isDM(id){ return String(id).startsWith("dm-"); }
 
 /* ---- Resources ---- */
 const THUMBS = [
@@ -796,7 +906,7 @@ const IC = {
 };
 
 /* ============================ STATE ============================ */
-const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null, kiosk:null, gift:false, giftSaved:null, reportPick:false, report:null, reportPeriod:"weekly", resEdit:null, resDraft:null, resView:null, resRead:null, editSession:null};
+const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null, kiosk:null, gift:false, giftSaved:null, reportPick:false, report:null, reportPeriod:"weekly", resEdit:null, resDraft:null, resView:null, resRead:null, editSession:null, chan:"all", compose:false, composeSent:false, invite:null, newDM:false, pick:[], mchat:null, mchatNew:false};
 const $ = id => document.getElementById(id);
 const app = $("app");
 const initials = n => n.split(/[\s]+/).filter(w=>w[0]&&/[A-Za-z]/.test(w[0])).slice(0,2).map(w=>w[0].toUpperCase()).join("");
@@ -1386,15 +1496,188 @@ function saveResource(){
   S.resEdit=null; S.resDraft=null; render();
 }
 
-function messagesView(){
-  return `<section class="card">
-    <div class="hd"><h2>Automations</h2><div class="spacer"></div><button class="mini">New automation</button></div>
-    ${[["First visit welcome","Text plus email, 2 hours after check in","On"],["Guest at 21 days","Invite to Next Steps","On"],["Stuck alert to staff","Any stage over 40 days","On"],["Serving interest","Route to team leader","On"],["Birthday note from the pastor","Sends 8am","Off"]].map(a=>`<div class="row"><span class="av solid" style="font-size:10px">${a[2]==="On"?"ON":"OFF"}</span><span><span class="rn">${a[0]}</span><span class="rs">${a[1]}</span></span><span class="spacer"></span><span class="toggle" role="button" aria-pressed="${a[2]==="On"}"></span></div>`).join("")}
-  </section>
-  <section class="card">
-    <div class="hd"><h2>Sent this week</h2><div class="spacer"></div><span class="pill">33 messages</span></div>
-    ${[["Sunday reminder","All members · 412 recipients","Sunday 7:00am"],["Group leader huddle","11 leaders","Tuesday"],["Kids volunteer gap","14 volunteers","Wednesday"]].map(m=>`<div class="row"><span class="av">${IC.msg}</span><span><span class="rn">${m[0]}</span><span class="rs">${m[1]}</span></span><span class="spacer"></span><span class="pill ghost">${m[2]}</span></div>`).join("")}
+const IC_HASH = '<svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 9h14M5 15h14M10 4L8 20M16 4l-2 16"/></svg>';
+const IC_LOCK = '<svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4.5" y="10" width="15" height="10" rx="2.5"/><path d="M8 10V7.5a4 4 0 018 0V10"/></svg>';
+const IC_DM   = '<svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>';
+
+function chatPanel(){
+  const c = chanById(S.chan);
+  const msgs = CHAT[S.chan] || [];
+  const dm = isDM(S.chan);
+  return `<section class="card" style="overflow:hidden">
+    <div class="hd"><h2>Church chat</h2><div class="spacer"></div>
+      <button class="mini" data-newdm>New direct message</button>
+      <button class="mini" data-compose style="border-color:var(--accent);color:var(--accent)">Send message</button></div>
+    <div class="bd" style="padding-bottom:10px;color:var(--muted);font-size:12.5px">
+      All Members is open to everyone. Team rooms are invite only. Anyone can start a direct message with another member.
+    </div>
+    <div class="chatwrap">
+      <div class="chanrail">
+        <div class="chanlbl">Group chats</div>
+        ${CHANNELS.map(ch=>`
+          <button class="chanbtn" data-chan="${ch.id}" aria-current="${S.chan===ch.id}">
+            ${ch.open?IC_HASH:IC_LOCK}
+            <span class="nm2">${ch.name}</span>
+            ${UNREAD[ch.id]?`<span class="un">${UNREAD[ch.id]}</span>`:""}
+          </button>`).join("")}
+        <div class="chanlbl">Direct messages</div>
+        ${DMS.map(d=>`
+          <button class="chanbtn" data-chan="${d.id}" aria-current="${S.chan===d.id}">
+            ${IC_DM}<span class="nm2">${d.name}</span>
+            ${UNREAD[d.id]?`<span class="un">${UNREAD[d.id]}</span>`:""}
+          </button>`).join("")}
+        <button class="chanbtn" data-newdm style="color:var(--accent);font-weight:500">
+          <span class="ci" style="text-align:center;font-size:15px;line-height:15px">+</span><span class="nm2">Start a chat</span>
+        </button>
+      </div>
+      <div class="thread">
+        <div class="thead">
+          <div style="flex:1">
+            <div class="tn">${dm?c.name:c.name}</div>
+            <div class="ts">${dm?"Direct message · only the two of you":`${c.members} members · ${c.purpose}`}</div>
+          </div>
+          ${dm?"":`<span class="pill ${c.open?"good":"ghost"}">${c.open?"Open to all":"Invite only"}</span>`}
+          ${dm||c.open?"":`<button class="mini" data-invite="${c.id}">Invite people</button>`}
+        </div>
+        <div class="msgs">
+          ${msgs.map(m=>`
+            <div class="msg ${m.me?"me":""} ${m.sys?"sys":""}">
+              ${m.sys?"":`<span class="mv">${initials(m.w)}</span>`}
+              <span>
+                ${m.sys?"":`<span class="mw">${m.w} · ${m.t}</span>`}
+                <span class="bub">${m.x}</span>
+              </span>
+            </div>`).join("")}
+        </div>
+        <div class="composer">
+          <input id="chatinput" placeholder="Message ${dm?c.name:c.name}" aria-label="Message">
+          <button class="btn" data-send-chat>Send</button>
+        </div>
+      </div>
+    </div>
   </section>`;
+}
+
+function composeModal(){
+  if(!S.compose) return "";
+  if(S.composeSent){
+    return `<div class="modalwrap"><div class="mscrim" data-compose-close></div>
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Message sent" style="max-width:420px">
+        <div class="sent"><div class="tick">&#10003;</div><h3>Message sent</h3>
+          <p>${S.composeSent}</p>
+          <button class="btn" style="margin-top:18px" data-compose-close>Close</button></div>
+      </div></div>`;
+  }
+  return `<div class="modalwrap"><div class="mscrim" data-compose-close></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Send a message" style="max-width:540px">
+      <div class="mh"><div><h3>Send a message</h3><div class="s">Goes to the app, and to email or text if you choose</div></div>
+        <button class="x" data-compose-close aria-label="Close">&times;</button></div>
+      <div class="mb">
+        <div class="field"><label for="cm-aud">Who gets this</label>
+          <select id="cm-aud">
+            ${CHANNELS.map(ch=>`<option value="${ch.id}">${ch.name} (${ch.members})</option>`).join("")}
+            <option value="guests">First time guests, last 30 days (23)</option>
+            <option value="stuck">People flagged as stuck (8)</option>
+          </select></div>
+        <div class="field"><label for="cm-chan">How it is delivered</label>
+          <select id="cm-chan">
+            <option>App notification</option>
+            <option>App notification and email</option>
+            <option>App notification and text</option>
+            <option>App, email, and text</option>
+          </select></div>
+        <div class="field" id="f-cmsubj"><label for="cm-subj">Subject</label><input id="cm-subj" placeholder="Sunday, August 9"><span class="err">Add a subject.</span></div>
+        <div class="field" id="f-cmbody"><label for="cm-body">Message</label><textarea id="cm-body" style="min-height:130px" placeholder="Write it the way you would say it from the stage."></textarea><span class="err">Write the message.</span></div>
+        <div class="field"><label for="cm-when">When</label>
+          <select id="cm-when"><option>Send now</option><option>Saturday 7:00 AM</option><option>Sunday 6:30 AM</option><option>Schedule for later</option></select></div>
+      </div>
+      <div class="mf">
+        <span class="note">Replies come back into the chat room, not a shared inbox</span>
+        <button class="btn sec" data-compose-close>Cancel</button>
+        <button class="btn" data-compose-send>Send</button>
+      </div>
+    </div></div>`;
+}
+
+function sendCompose(){
+  const g = id => document.getElementById(id);
+  const subj = g("cm-subj").value.trim(), body = g("cm-body").value.trim();
+  let ok = true;
+  if(!subj){ g("f-cmsubj").classList.add("bad"); ok=false; }
+  if(!body){ g("f-cmbody").classList.add("bad"); ok=false; }
+  if(!ok) return;
+  const aud = g("cm-aud").value, how = g("cm-chan").value, when = g("cm-when").value;
+  const ch = CHANNELS.find(c=>c.id===aud);
+  const count = ch ? ch.members : (aud==="guests"?23:8);
+  const label = ch ? ch.name : (aud==="guests"?"first time guests":"people flagged as stuck");
+  if(ch){
+    (CHAT[ch.id] = CHAT[ch.id]||[]).push({w:"Pastor Reed", t:when==="Send now"?"Just now":when, me:true, x:`<b>${subj}</b><br>${body}`});
+    S.chan = ch.id;
+  }
+  S.composeSent = `${when==="Send now"?"Delivered":"Scheduled"} to ${count} people in ${label} by ${how.toLowerCase()}.`;
+  render();
+}
+
+function inviteModal(){
+  if(!S.invite) return "";
+  const ch = CHANNELS.find(c=>c.id===S.invite);
+  const names = PEOPLE.map(p2=>p2.n);
+  return `<div class="modalwrap"><div class="mscrim" data-invite-close></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Invite people" style="max-width:460px">
+      <div class="mh"><div><h3>Invite to ${ch.name}</h3><div class="s">Invite only. People cannot join this room on their own.</div></div>
+        <button class="x" data-invite-close aria-label="Close">&times;</button></div>
+      <div class="mb">
+        <div class="picklist">
+          ${names.map(n=>`
+            <button class="pickrow" data-pick="${n}" aria-pressed="${S.pick.includes(n)}">
+              <span class="av">${initials(n)}</span>
+              <span style="flex:1"><span class="rn">${n}</span></span>
+              <span class="check" style="width:22px;height:22px;border-radius:50%;border:2px solid ${S.pick.includes(n)?"var(--accent)":"var(--line)"};background:${S.pick.includes(n)?"var(--accent)":"transparent"};color:#fff;display:grid;place-items:center;font-size:11px">${S.pick.includes(n)?"&#10003;":""}</span>
+            </button>`).join("")}
+        </div>
+      </div>
+      <div class="mf">
+        <span class="note">${S.pick.length} selected</span>
+        <button class="btn sec" data-invite-close>Cancel</button>
+        <button class="btn" data-invite-send ${S.pick.length?"":"disabled style=opacity:.4"}>Add to room</button>
+      </div>
+    </div></div>`;
+}
+
+function newDMModal(){
+  if(!S.newDM) return "";
+  const taken = DMS.map(d=>d.name);
+  const names = PEOPLE.map(p2=>p2.n).filter(n=>!taken.includes(n));
+  return `<div class="modalwrap"><div class="mscrim" data-dm-close></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Start a chat" style="max-width:440px">
+      <div class="mh"><div><h3>Start a chat</h3><div class="s">Any member can message another member directly</div></div>
+        <button class="x" data-dm-close aria-label="Close">&times;</button></div>
+      <div class="mb">
+        <div class="picklist">
+          ${names.length?names.map(n=>`
+            <button class="pickrow" data-startdm="${n}">
+              <span class="av">${initials(n)}</span>
+              <span style="flex:1"><span class="rn">${n}</span><span class="rs">Tap to open a conversation</span></span>
+            </button>`).join(""):`<div class="emptynote">You already have a chat with everyone here.</div>`}
+        </div>
+      </div>
+      <div class="mf"><span class="note">Direct messages are private between the two of you</span>
+        <button class="btn sec" data-dm-close>Close</button></div>
+    </div></div>`;
+}
+
+function messagesView(){
+  return `${chatPanel()}
+  <div class="grid-2">
+    <section class="card">
+      <div class="hd"><h2>Automations</h2><div class="spacer"></div><button class="mini">New automation</button></div>
+      ${[["First visit welcome","Text plus email, 2 hours after check in","On"],["Guest at 21 days","Invite to Next Steps","On"],["Stuck alert to staff","Any stage over 40 days","On"],["Serving interest","Route to team leader","On"],["Birthday note from the pastor","Sends 8am","Off"]].map(a=>`<div class="row"><span class="av solid" style="font-size:10px">${a[2]==="On"?"ON":"OFF"}</span><span><span class="rn">${a[0]}</span><span class="rs">${a[1]}</span></span><span class="spacer"></span><span class="toggle" role="button" aria-pressed="${a[2]==="On"}"></span></div>`).join("")}
+    </section>
+    <section class="card">
+      <div class="hd"><h2>Sent this week</h2><div class="spacer"></div><span class="pill">33 messages</span></div>
+      ${[["Sunday reminder","All Members · 412 recipients","Sunday 7:00am"],["Group leader huddle","11 leaders","Tuesday"],["Kids volunteer gap","Kids Team · 23 recipients","Wednesday"]].map(m=>`<div class="row"><span class="av">${IC.msg}</span><span><span class="rn">${m[0]}</span><span class="rs">${m[1]}</span></span><span class="spacer"></span><span class="pill ghost">${m[2]}</span></div>`).join("")}
+    </section>
+  </div>`;
 }
 
 function settingsView(){
@@ -1457,6 +1740,8 @@ function staffView(){
             ? `<button class="btn sec" data-report-open>Run report</button><button class="btn" data-gift-open>Record gift</button>`
           : S.tab==="resources"
             ? `<button class="btn" data-res-new>Add a resource</button>`
+          : S.tab==="messages"
+            ? `<button class="btn" data-compose>Send message</button>`
             : `<button class="btn">${PRIMARY_ACTION[S.tab] || "Add a person"}</button>`}
       </div>
       <div class="content">${body}</div>
@@ -1576,6 +1861,54 @@ function memberGrow(){
     </div>
   </div>`;
 }
+function memberChat(){
+  const mine = ["all","kids"];
+  if(S.mchat){
+    const c = chanById(S.mchat) || {name:"Chat"};
+    const msgs = CHAT[S.mchat] || [];
+    return `<div class="mhead" style="padding-bottom:10px">
+        <button class="mback" data-mchat-back>&#8249; All chats</button>
+        <div class="hi" style="font-size:18px;margin-top:4px">${c.name}</div>
+        <div class="sub">${isDM(S.mchat)?"Direct message":`${c.members} members`}</div>
+      </div>
+      <div class="mbody" style="gap:0">
+        <div class="msgs" style="padding:4px 0 10px">
+          ${msgs.map(m=>`
+            <div class="msg ${m.me?"me":""} ${m.sys?"sys":""}" style="max-width:88%">
+              ${m.sys?"":`<span class="mv">${initials(m.w)}</span>`}
+              <span>${m.sys?"":`<span class="mw">${m.w}</span>`}<span class="bub">${m.x}</span></span>
+            </div>`).join("")}
+        </div>
+      </div>
+      <div class="composer" style="padding:10px 14px">
+        <input id="mchatinput" placeholder="Message" aria-label="Message">
+        <button class="btn" data-msend>Send</button>
+      </div>`;
+  }
+  return `<div class="mhead"><div class="hi">Chat</div><div class="sub">Your rooms and messages</div></div>
+    <div class="mbody">
+      <div class="mcard tint" style="padding:13px 15px">
+        <div class="lbl">Group chats</div>
+        ${CHANNELS.filter(c=>mine.includes(c.id)).map(c=>`
+          <button class="row" data-mchat="${c.id}" style="padding:10px 0;border-top:1px solid rgba(11,16,38,.07)">
+            <span class="av solid" style="width:30px;height:30px;font-size:11px">${c.open?"#":"&#128274;"}</span>
+            <span style="flex:1;text-align:left"><span class="rn">${c.name}</span><span class="rs">${c.members} members</span></span>
+            ${UNREAD[c.id]?`<span class="un">${UNREAD[c.id]}</span>`:""}
+          </button>`).join("")}
+        <div class="d" style="margin-top:9px">Worship, Youth, and Welcome rooms are invite only. A leader adds you when you join the team.</div>
+      </div>
+      <div class="mcard">
+        <div class="lbl">Direct messages</div>
+        ${DMS.map(d=>`
+          <button class="row" data-mchat="${d.id}" style="padding:10px 0;border-top:1px solid var(--line-soft)">
+            <span class="av" style="width:30px;height:30px;font-size:11px">${initials(d.name)}</span>
+            <span style="flex:1;text-align:left"><span class="rn">${d.name}</span><span class="rs">${(CHAT[d.id]&&CHAT[d.id].length)?CHAT[d.id][CHAT[d.id].length-1].x.slice(0,38)+"...":"No messages yet"}</span></span>
+          </button>`).join("")}
+        <button class="mbtn ghost" data-mchat-new>Message someone new</button>
+      </div>
+    </div>`;
+}
+
 function memberProfile(){
   return `<div class="mhead"><div class="hi">Alicia Romero</div><div class="sub">Attender · 12 days</div></div>
   <div class="mbody">
@@ -1599,8 +1932,8 @@ function memberProfile(){
   </div>`;
 }
 function memberView(){
-  const tabs = [["home","Home",IC.home],["give","Give",IC.give],["serve","Serve",IC.hand],["grow","Grow",IC.grow],["profile","You",IC.user]];
-  const body = {home:memberHome,give:memberGive,serve:memberServe,grow:memberGrow,profile:memberProfile}[S.memberTab]();
+  const tabs = [["home","Home",IC.home],["give","Give",IC.give],["serve","Serve",IC.hand],["grow","Grow",IC.grow],["chat","Chat",IC.msg],["profile","You",IC.user]];
+  const body = {home:memberHome,give:memberGive,serve:memberServe,grow:memberGrow,chat:memberChat,profile:memberProfile}[S.memberTab]();
   return `<div class="memberwrap">
     <div class="phone">
       <div class="screen">
@@ -1993,6 +2326,16 @@ function chartModal(){
     </div></div>`;
 }
 
+function sendChat(inputId, chanId, who){
+  const el = document.getElementById(inputId||"chatinput"); if(!el) return;
+  const txt = el.value.trim(); if(!txt) return;
+  const id = chanId || S.chan;
+  (CHAT[id] = CHAT[id]||[]).push({w:who||"Pastor Reed", t:"Just now", me:true, x:txt.replace(/</g,"&lt;")});
+  el.value=""; render();
+  const box = document.querySelector(S.view==="member"?".mbody .msgs":".msgs");
+  if(box) box.scrollTop = box.scrollHeight;
+}
+
 function toast(msg){ S.toast = msg; clearTimeout(window.__t); window.__t = setTimeout(()=>{S.toast=null; render();}, 2600); }
 function toastEl(){ return S.toast ? `<div class="toast">${S.toast}</div>` : ""; }
 
@@ -2115,15 +2458,41 @@ function closeDrawer(){ $("drawer").classList.remove("on"); $("scrim").classList
 /* ============================ RENDER ============================ */
 function render(){
   setAccent();
-  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + kioskView() + giftModal() + reportPicker() + reportModal() + resourceEditor() + planView() + readerView() + toastEl();
+  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + kioskView() + giftModal() + reportPicker() + reportModal() + resourceEditor() + planView() + readerView() + composeModal() + inviteModal() + newDMModal() + toastEl();
   $("viewStaff").setAttribute("aria-selected", S.view==="staff");
   $("viewMember").setAttribute("aria-selected", S.view==="member");
   const q = $("q"); if(q && S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); }
 }
 
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],[data-res],[data-plan],[data-plan-close],[data-read],[data-read-jump],[data-read-done],[data-reader-close],[data-res-edit],[data-sesscontent],[data-content-back],[data-content-save],[data-upload],[data-thumb-clear],[data-res-new],[data-res-close],[data-res-save],[data-res-del],[data-thumb],[data-sessadd],[data-sessdel],[data-sessmove],[data-gift-open],[data-close-gift],[data-save-gift],[data-report-open],[data-close-rp],[data-period],[data-run-report],[data-quickreport],[data-close-report],[data-export-report],[data-kiosk-open],[data-kiosk-exit],[data-kiosk-again],[data-kiosk-new],[data-kiosk-go],[data-pin],[data-kid],.toggle");
+  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],[data-chan],[data-send-chat],[data-compose],[data-compose-close],[data-compose-send],[data-invite],[data-invite-close],[data-invite-send],[data-pick],[data-newdm],[data-dm-close],[data-startdm],[data-mchat],[data-mchat-back],[data-mchat-new],[data-msend],[data-res],[data-plan],[data-plan-close],[data-read],[data-read-jump],[data-read-done],[data-reader-close],[data-res-edit],[data-sesscontent],[data-content-back],[data-content-save],[data-upload],[data-thumb-clear],[data-res-new],[data-res-close],[data-res-save],[data-res-del],[data-thumb],[data-sessadd],[data-sessdel],[data-sessmove],[data-gift-open],[data-close-gift],[data-save-gift],[data-report-open],[data-close-rp],[data-period],[data-run-report],[data-quickreport],[data-close-report],[data-export-report],[data-kiosk-open],[data-kiosk-exit],[data-kiosk-again],[data-kiosk-new],[data-kiosk-go],[data-pin],[data-kid],.toggle");
   if(!t) return;
+  if(t.dataset.chan){ S.chan=t.dataset.chan; delete UNREAD[t.dataset.chan]; render(); return; }
+  if(t.hasAttribute("data-send-chat")){ sendChat(); return; }
+  if(t.hasAttribute("data-compose")){ S.compose=true; S.composeSent=null; render(); document.getElementById("cm-subj").focus(); return; }
+  if(t.hasAttribute("data-compose-close")){ S.compose=false; S.composeSent=null; render(); return; }
+  if(t.hasAttribute("data-compose-send")){ sendCompose(); return; }
+  if(t.dataset.invite){ S.invite=t.dataset.invite; S.pick=[]; render(); return; }
+  if(t.hasAttribute("data-invite-close")){ S.invite=null; S.pick=[]; render(); return; }
+  if(t.dataset.pick){ const n=t.dataset.pick; S.pick = S.pick.includes(n)?S.pick.filter(x=>x!==n):S.pick.concat(n); render(); return; }
+  if(t.hasAttribute("data-invite-send")){
+    const ch = CHANNELS.find(c=>c.id===S.invite);
+    ch.members += S.pick.length;
+    (CHAT[ch.id]=CHAT[ch.id]||[]).push({sys:true, x:`Pastor Reed added ${S.pick.join(", ")} to ${ch.name}`});
+    S.chan = ch.id; toast(`${S.pick.length} added to ${ch.name}.`);
+    S.invite=null; S.pick=[]; render(); return;
+  }
+  if(t.hasAttribute("data-newdm")){ S.newDM=true; render(); return; }
+  if(t.hasAttribute("data-dm-close")){ S.newDM=false; render(); return; }
+  if(t.dataset.startdm){
+    const n=t.dataset.startdm, id="dm-"+n.toLowerCase().replace(/[^a-z]/g,"").slice(0,10);
+    if(!DMS.find(d=>d.id===id)){ DMS.push({id, name:n}); CHAT[id]=[]; }
+    S.newDM=false; S.chan=id; if(S.view==="member") S.mchat=id; toast(`Chat started with ${n}.`); render(); return;
+  }
+  if(t.dataset.mchat){ S.mchat=t.dataset.mchat; delete UNREAD[t.dataset.mchat]; render(); return; }
+  if(t.hasAttribute("data-mchat-back")){ S.mchat=null; render(); return; }
+  if(t.hasAttribute("data-mchat-new")){ S.newDM=true; render(); return; }
+  if(t.hasAttribute("data-msend")){ sendChat("mchatinput", S.mchat, "Alicia Romero"); return; }
   if(t.dataset.plan){ S.resView=t.dataset.plan; render(); return; }
   if(t.hasAttribute("data-plan-close")){ S.resView=null; render(); return; }
   if(t.dataset.read){ S.resRead=t.dataset.read; render(); return; }
@@ -2206,7 +2575,7 @@ document.addEventListener("click", e=>{
     render(); return;
   }
   if(t.dataset.person){ openPerson(+t.dataset.person); return; }
-  if(t.dataset.mtab){ S.memberTab=t.dataset.mtab; render(); return; }
+  if(t.dataset.mtab){ S.memberTab=t.dataset.mtab; if(t.dataset.mtab!=="chat") S.mchat=null; render(); return; }
   if(t.dataset.color){ CHURCHES[S.church].accent=t.dataset.color; render(); return; }
   if(t.dataset.amt){ S.amount=+t.dataset.amt; render(); return; }
   if(t.classList.contains("toggle")){ t.setAttribute("aria-pressed", t.getAttribute("aria-pressed")!=="true"); return; }
@@ -2225,12 +2594,17 @@ document.addEventListener("change", e=>{
   if(k){ const sg = svc().songs.find(x=>x.id===k.dataset.key); if(sg){ sg.key = k.value; toast(`${sg.title} moved to ${sg.key}. Charts follow the key.`); render(); } }
 });
 document.addEventListener("keydown", e=>{
+  if(e.key==="Enter" && e.target.id==="chatinput"){ sendChat(); return; }
+  if(e.key==="Enter" && e.target.id==="mchatinput"){ sendChat("mchatinput", S.mchat, "Alicia Romero"); return; }
   if(e.key==="Escape"){
     closeDrawer();
     if(S.kiosk){S.kiosk=null;render();return;}
     if(S.report){S.report=null;render();return;}
     if(S.reportPick){S.reportPick=false;render();return;}
     if(S.gift){S.gift=false;S.giftSaved=null;render();return;}
+    if(S.newDM){S.newDM=false;render();return;}
+    if(S.invite){S.invite=null;S.pick=[];render();return;}
+    if(S.compose){S.compose=false;S.composeSent=null;render();return;}
     if(S.resRead){S.resRead=null;render();return;}
     if(S.resView){S.resView=null;render();return;}
     if(S.editSession!==null&&S.editSession!==undefined){S.editSession=null;render();return;}
