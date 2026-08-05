@@ -1729,8 +1729,10 @@ function staffView(){
       <div class="topline">
         <div><h1>${t}</h1><div class="sub">${sub}</div></div>
         <div class="spacer"></div>
-        <button class="btn sec">Search</button>
-        ${S.tab==="dashboard"
+        ${S.tab==="settings" ? "" : `<button class="btn sec">Search</button>`}
+        ${S.tab==="settings"
+          ? ``
+          : S.tab==="dashboard"
           ? `<button class="btn" data-support>Request support</button>`
           : S.tab==="services"
             ? `<button class="btn" data-newsvc>New Service</button>`
