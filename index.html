@@ -268,6 +268,35 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 
 .emptynote{padding:26px 18px;text-align:center;color:var(--muted);font-size:13px}
 
+/* ---------- Support modal ---------- */
+.modalwrap{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:24px}
+.modalwrap .mscrim{position:absolute;inset:0;background:rgba(11,16,38,.5)}
+.modal{position:relative;width:100%;max-width:470px;background:#fff;border-radius:var(--r-lg);box-shadow:var(--shadow-lg);overflow:hidden;max-height:88vh;display:flex;flex-direction:column}
+.modal .mh{padding:20px 22px 16px;background:var(--ink);color:#fff;display:flex;align-items:flex-start;gap:12px}
+.modal .mh h3{margin:0;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.modal .mh .s{font-size:12px;color:rgba(255,255,255,.55);margin-top:3px;line-height:1.45}
+.modal .mh .x{margin-left:auto;color:rgba(255,255,255,.6);font-size:20px;line-height:1;padding:2px 8px;border-radius:8px}
+.modal .mh .x:hover{background:rgba(255,255,255,.1);color:#fff}
+.modal .mb{padding:20px 22px;overflow-y:auto;display:grid;gap:14px}
+.field{display:grid;gap:6px}
+.field label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--muted-2)}
+.field input,.field textarea,.field select{
+  font-family:inherit;font-size:13.5px;color:var(--ink);background:#fff;
+  border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;
+}
+.field textarea{min-height:96px;resize:vertical;line-height:1.5}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,255,.14)}
+.field .err{font-size:11.5px;color:var(--flag);display:none}
+.field.bad input,.field.bad textarea{border-color:var(--flag)}
+.field.bad .err{display:block}
+.modal .mf{padding:14px 22px;border-top:1px solid var(--line);background:#FAFBFF;display:flex;gap:9px;align-items:center}
+.modal .mf .note{font-size:11px;color:var(--muted-2);flex:1;min-width:0;line-height:1.4;word-break:break-word}
+.modal .mf .btn{white-space:nowrap}
+.sent{padding:34px 26px;text-align:center}
+.sent .tick{width:46px;height:46px;border-radius:50%;background:var(--good-bg);color:var(--good);display:grid;place-items:center;margin:0 auto 14px;font-size:22px;font-weight:600}
+.sent h3{margin:0;font-size:17px;font-weight:600}
+.sent p{margin:8px 0 0;font-size:13px;color:var(--muted);line-height:1.55}
+
 @media (max-width:1180px){
   .metrics{grid-template-columns:repeat(2,1fr)}
   .grid-2{grid-template-columns:1fr}
@@ -316,6 +345,11 @@ const CHURCHES = [
   {name:"Between Sundays", short:"BS", city:"Chicago, IL", logo:LOGO_BS, accent:"#2563FF", people:412, weekly:38420},
   {name:"Riverbend Fellowship", short:"RF", city:"Aurora, IL", logo:null, accent:"#1E3A8A", people:186, weekly:14970}
 ];
+
+/* Support request routing.
+   endpoint: leave "" to open the sender's email app with the request prefilled (works with no setup).
+   Set it to a form service URL (Formspree, Web3Forms, or your own Resend endpoint) to send silently. */
+const SUPPORT = { to:"isaac@betweensundaysconsulting.com", endpoint:"" };
 
 const STAGES = ["Visitor","Guest","Attender","Member","Volunteer","Disciple","Leader"];
 const STAGE_COUNTS = [34,21,96,148,62,28,11];
@@ -398,7 +432,7 @@ const IC = {
 };
 
 /* ============================ STATE ============================ */
-const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100};
+const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false};
 const $ = id => document.getElementById(id);
 const app = $("app");
 const initials = n => n.split(/[\s]+/).filter(w=>w[0]&&/[A-Za-z]/.test(w[0])).slice(0,2).map(w=>w[0].toUpperCase()).join("");
@@ -674,7 +708,9 @@ function staffView(){
         <div><h1>${t}</h1><div class="sub">${sub}</div></div>
         <div class="spacer"></div>
         <button class="btn sec">Search</button>
-        <button class="btn">Add a person</button>
+        ${S.tab==="dashboard"
+          ? `<button class="btn" data-support>Request support</button>`
+          : `<button class="btn">Add a person</button>`}
       </div>
       <div class="content">${body}</div>
     </main>
@@ -852,6 +888,78 @@ function talkPanel(){
   </aside>`;
 }
 
+/* ============================ SUPPORT MODAL ============================ */
+function supportModal(){
+  if(!S.support) return "";
+  const c = CHURCHES[S.church];
+  if(S.supportSent){
+    return `<div class="modalwrap"><div class="mscrim" data-close-support></div>
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Request sent">
+        <div class="sent">
+          <div class="tick">&#10003;</div>
+          <h3>Request sent</h3>
+          <p>${SUPPORT.to} has your request. Expect a reply within one business day.</p>
+          <button class="btn" style="margin-top:18px" data-close-support>Close</button>
+        </div>
+      </div></div>`;
+  }
+  return `<div class="modalwrap"><div class="mscrim" data-close-support></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Request support">
+      <div class="mh">
+        <div><h3>Request support</h3><div class="s">Send this to your support team. Someone replies within one business day.</div></div>
+        <button class="x" data-close-support aria-label="Close">&times;</button>
+      </div>
+      <div class="mb">
+        <div class="field" id="f-name"><label for="sup-name">Your name</label><input id="sup-name" autocomplete="name"><span class="err">Add your name.</span></div>
+        <div class="field"><label for="sup-org">Church or organization</label><input id="sup-org" value="${c.name}"></div>
+        <div class="field" id="f-email"><label for="sup-email">Email for the reply</label><input id="sup-email" type="email" autocomplete="email"><span class="err">Add an email we can reply to.</span></div>
+        <div class="field"><label for="sup-urgency">How urgent</label>
+          <select id="sup-urgency">
+            <option>Question, no rush</option>
+            <option>Needed this week</option>
+            <option>Blocking us right now</option>
+          </select>
+        </div>
+        <div class="field" id="f-msg"><label for="sup-msg">What do you need</label><textarea id="sup-msg" placeholder="Describe what is happening and what you expected."></textarea><span class="err">Tell us what you need.</span></div>
+      </div>
+      <div class="mf">
+        <span class="note">Goes to ${SUPPORT.to}</span>
+        <button class="btn sec" data-close-support>Cancel</button>
+        <button class="btn" data-send-support>Send request</button>
+      </div>
+    </div></div>`;
+}
+
+function sendSupport(){
+  const val = id => (document.getElementById(id)?.value || "").trim();
+  const name=val("sup-name"), org=val("sup-org"), email=val("sup-email"), urg=val("sup-urgency"), msg=val("sup-msg");
+  let ok = true;
+  const mark = (wrap, bad) => { const el=document.getElementById(wrap); if(el) el.classList.toggle("bad", bad); if(bad) ok=false; };
+  mark("f-name", !name);
+  mark("f-email", !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email));
+  mark("f-msg", !msg);
+  if(!ok) return;
+
+  const subject = `Support request: ${org || "Discipleship Operating System"}`;
+  const body = `Name: ${name}\nChurch or organization: ${org}\nReply to: ${email}\nUrgency: ${urg}\n\n${msg}`;
+
+  const done = () => { S.supportSent = true; render(); };
+
+  if(SUPPORT.endpoint){
+    fetch(SUPPORT.endpoint, {
+      method:"POST",
+      headers:{"Content-Type":"application/json", "Accept":"application/json"},
+      body: JSON.stringify({to:SUPPORT.to, name, organization:org, email, urgency:urg, message:msg, subject})
+    }).then(done).catch(()=>{
+      window.location.href = `mailto:${SUPPORT.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      done();
+    });
+  } else {
+    window.location.href = `mailto:${SUPPORT.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    done();
+  }
+}
+
 /* ============================ DRAWER ============================ */
 function openPerson(id){
   const p = PEOPLE.find(x=>x.id===id); if(!p) return;
@@ -899,15 +1007,18 @@ function closeDrawer(){ $("drawer").classList.remove("on"); $("scrim").classList
 /* ============================ RENDER ============================ */
 function render(){
   setAccent();
-  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel();
+  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal();
   $("viewStaff").setAttribute("aria-selected", S.view==="staff");
   $("viewMember").setAttribute("aria-selected", S.view==="member");
   const q = $("q"); if(q && S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); }
 }
 
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-color],[data-amt],.toggle");
+  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],.toggle");
   if(!t) return;
+  if(t.hasAttribute("data-support")){ S.support=true; S.supportSent=false; render(); document.getElementById("sup-name")?.focus(); return; }
+  if(t.hasAttribute("data-close-support")){ S.support=false; S.supportSent=false; render(); return; }
+  if(t.hasAttribute("data-send-support")){ sendSupport(); return; }
   if(t.hasAttribute("data-close")){ closeDrawer(); return; }
   if(t.hasAttribute("data-close-talk")){ S.talk=false; render(); return; }
   if(t.dataset.tab){ S.tab=t.dataset.tab; S.stageFilter=null; render(); return; }
@@ -925,7 +1036,7 @@ document.addEventListener("click", e=>{
 });
 document.addEventListener("input", e=>{ if(e.target.id==="q"){ S.q=e.target.value; render(); } });
 document.addEventListener("keydown", e=>{
-  if(e.key==="Escape"){ closeDrawer(); if(S.talk){S.talk=false;render();} return; }
+  if(e.key==="Escape"){ closeDrawer(); if(S.support){S.support=false;S.supportSent=false;render();return;} if(S.talk){S.talk=false;render();} return; }
   if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA") return;
   if(e.key==="t"||e.key==="T"){ S.talk=!S.talk; render(); }           // hidden: talk track
   if(e.key==="c"||e.key==="C"){ S.church=(S.church+1)%CHURCHES.length; render(); } // hidden: switch client brand
