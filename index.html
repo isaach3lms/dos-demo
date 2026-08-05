@@ -309,6 +309,31 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   background:var(--ink);color:#fff;font-size:13px;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow-lg);
 }
 
+/* ---------- Resources ---------- */
+.resgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.rescard{background:#fff;border:1px solid var(--line-soft);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden;text-align:left;display:flex;flex-direction:column}
+.rescard:hover{box-shadow:var(--shadow-md);border-color:var(--line)}
+.thumb{aspect-ratio:16/9;display:grid;place-items:center;position:relative;overflow:hidden}
+.thumb .glyph{width:44px;height:44px;opacity:.95}
+.thumb .badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.92);color:var(--ink)}
+.thumb.lite .glyph{color:var(--navy)}
+.rescard .rbody{padding:13px 15px 15px;flex:1;display:flex;flex-direction:column}
+.rescard .rt{font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.3}
+.rescard .rd{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45;flex:1}
+.rescard .rf{display:flex;align-items:center;gap:8px;margin-top:11px}
+.rescard .rf .m{font-size:11.5px;color:var(--muted-2);margin-left:auto}
+.thumbpick{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.thumbpick button{aspect-ratio:1;border-radius:11px;border:2px solid transparent}
+.thumbpick button[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 2px #fff inset}
+.sess{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px dashed var(--line-soft)}
+.sess .num{width:22px;flex:none;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted-2);font-weight:600}
+.sess input{font-family:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;color:var(--ink)}
+.sess .st{flex:1;min-width:0}
+.sess .sr{width:118px;flex:none}
+.sess .acts{display:flex;gap:4px;flex:none}
+.bigthumb{aspect-ratio:5/1;max-height:118px;border-radius:14px;display:grid;place-items:center;margin-bottom:4px}
+.bigthumb .glyph{width:42px;height:42px}
+
 /* ---------- Giving reports ---------- */
 .rpt{display:grid;gap:16px}
 .rptnums{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
@@ -508,6 +533,35 @@ const PEOPLE = [
    next:"Fall group launch planning"}
 ];
 
+/* ---- Resources ---- */
+const THUMBS = [
+  {bg:"linear-gradient(135deg,#2563FF 0%,#1E3A8A 100%)", lite:false},
+  {bg:"linear-gradient(135deg,#1E3A8A 0%,#0B1026 100%)", lite:false},
+  {bg:"linear-gradient(135deg,#0B1026 0%,#2563FF 100%)", lite:false},
+  {bg:"linear-gradient(135deg,#E6EEFF 0%,#B9CEFF 100%)", lite:true},
+  {bg:"radial-gradient(circle at 30% 25%,#3D77FF 0%,#1E3A8A 70%)", lite:false},
+  {bg:"linear-gradient(160deg,#2563FF 0%,#0B1026 100%)", lite:false}
+];
+const RES_TYPES = ["Reading plan","Course","Bible study","Training","Devotional","Next steps path"];
+
+let RESOURCES = [
+  {id:"r1", title:"Known: a 5 day reading plan", type:"Reading plan", status:"Published", thumb:0, started:218,
+   desc:"Companion plan for the Known series. One passage and one question a day.",
+   sessions:[{t:"Day 1: Searched and known",r:"Psalm 139:1-6",m:6},{t:"Day 2: Nowhere to hide",r:"Psalm 139:7-12",m:6},{t:"Day 3: Formed on purpose",r:"Psalm 139:13-16",m:7},{t:"Day 4: Known by name",r:"John 10:1-15",m:8},{t:"Day 5: Known and sent",r:"John 15:9-17",m:8}]},
+  {id:"r2", title:"Your first 30 days", type:"Next steps path", status:"Published", thumb:3, started:41,
+   desc:"What to expect, who to meet, and the three steps we ask every new guest to take.",
+   sessions:[{t:"Week 1: Who we are",r:"Welcome video",m:9},{t:"Week 2: Find a group",r:"Group finder",m:12},{t:"Week 3: Meet the team",r:"Coffee invite",m:10},{t:"Week 4: Take a next step",r:"Next Steps class",m:15}]},
+  {id:"r3", title:"Leading a group well", type:"Training", status:"Published", thumb:1, started:12,
+   desc:"Six lessons every group leader completes before their first meeting.",
+   sessions:[{t:"Lesson 1: What a group is for",r:"Acts 2:42-47",m:14},{t:"Lesson 2: Asking better questions",r:"Facilitation",m:12},{t:"Lesson 3: Handling hard moments",r:"Care and referral",m:16},{t:"Lesson 4: Multiplying leaders",r:"2 Timothy 2:2",m:13},{t:"Lesson 5: Prayer in a group",r:"Practice",m:10},{t:"Lesson 6: Your first six weeks",r:"Planning",m:15}]},
+  {id:"r4", title:"Money and faith", type:"Bible study", status:"Published", thumb:4, started:64,
+   desc:"Four weeks on generosity, debt, contentment, and giving as worship.",
+   sessions:[{t:"Week 1: Who owns it",r:"Psalm 24:1",m:18},{t:"Week 2: Debt and freedom",r:"Proverbs 22:7",m:18},{t:"Week 3: Contentment",r:"Philippians 4:10-13",m:16},{t:"Week 4: Giving as worship",r:"2 Corinthians 9",m:20}]},
+  {id:"r5", title:"Baptism: what it means", type:"Course", status:"Draft", thumb:5, started:0,
+   desc:"Short course for anyone considering baptism. Not published yet.",
+   sessions:[{t:"Part 1: Why we baptize",r:"Matthew 28:18-20",m:11}]}
+];
+
 /* ---- Giving ---- */
 let MANUAL_GIFTS = [];
 
@@ -631,7 +685,7 @@ const IC = {
 };
 
 /* ============================ STATE ============================ */
-const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null, kiosk:null, gift:false, giftSaved:null, reportPick:false, report:null, reportPeriod:"weekly"};
+const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null, kiosk:null, gift:false, giftSaved:null, reportPick:false, report:null, reportPeriod:"weekly", resEdit:null, resDraft:null};
 const $ = id => document.getElementById(id);
 const app = $("app");
 const initials = n => n.split(/[\s]+/).filter(w=>w[0]&&/[A-Za-z]/.test(w[0])).slice(0,2).map(w=>w[0].toUpperCase()).join("");
@@ -969,12 +1023,133 @@ function givingView(){
   </div>`;
 }
 
+const RES_GLYPH = {
+  "Reading plan":'<svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5A2 2 0 016 4h5v16H6a2 2 0 01-2-2z"/><path d="M20 5.5A2 2 0 0018 4h-5v16h5a2 2 0 002-2z"/></svg>',
+  "Course":'<svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l9-4 9 4-9 4z"/><path d="M7 10.5V16c0 1.7 2.2 3 5 3s5-1.3 5-3v-5.5"/></svg>',
+  "Bible study":'<svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M12 8v6M9.5 11h5"/></svg>',
+  "Training":'<svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.3"/><path d="M5 20c0-3.5 3.1-5.8 7-5.8s7 2.3 7 5.8"/></svg>',
+  "Devotional":'<svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.4-7-9.4A4.1 4.1 0 0112 9a4.1 4.1 0 017 2.6c0 5-7 9.4-7 9.4z"/></svg>',
+  "Next steps path":'<svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 18h5v-5h5V8h6"/><path d="M17 5l3 3-3 3"/></svg>'
+};
+function thumbStyle(i){ const t = THUMBS[i] || THUMBS[0]; return `background:${t.bg}`; }
+function thumbLite(i){ return (THUMBS[i]||THUMBS[0]).lite ? "lite" : ""; }
+function glyphFor(type){ return RES_GLYPH[type] || RES_GLYPH["Reading plan"]; }
+
 function resourcesView(){
   return `<section class="card">
-    <div class="hd"><h2>Published to your people</h2><div class="spacer"></div><span class="pill good">Your name on all of it</span></div>
-    <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">Written for ${CHURCHES[S.church].name} and delivered inside your app. Members never see another brand.</div>
-    ${[["Known: a 5 day reading plan","Sermon series companion","218 started"],["Your first 30 days","New guest path","41 started"],["Leading a group well","Leader training, 6 lessons","12 leaders"],["Money and faith","4 week study","64 started"]].map(r=>`<div class="row"><span class="av">${IC.res}</span><span><span class="rn">${r[0]}</span><span class="rs">${r[1]}</span></span><span class="spacer"></span><span class="pill ghost">${r[2]}</span></div>`).join("")}
+    <div class="hd"><h2>Published to your people</h2><div class="spacer"></div>
+      <button class="mini" data-res-new style="border-color:var(--accent);color:var(--accent)">Add a resource</button></div>
+    <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">
+      Written for ${CHURCHES[S.church].name} and delivered inside your app. Members never see another brand. Click any resource to edit the plan.
+    </div>
+    <div class="bd" style="padding-top:8px">
+      <div class="resgrid">
+        ${RESOURCES.map(r=>`
+          <button class="rescard" data-res="${r.id}">
+            <span class="thumb ${thumbLite(r.thumb)}" style="${thumbStyle(r.thumb)};color:#fff">
+              ${glyphFor(r.type)}
+              <span class="badge">${r.status}</span>
+            </span>
+            <span class="rbody">
+              <span class="rt">${r.title}</span>
+              <span class="rd">${r.desc}</span>
+              <span class="rf">
+                <span class="pill">${r.type}</span>
+                <span class="m">${r.sessions.length} ${r.sessions.length===1?"session":"sessions"}${r.started?` · ${r.started} started`:""}</span>
+              </span>
+            </span>
+          </button>`).join("")}
+        <button class="rescard" data-res-new style="display:grid;place-items:center;padding:26px;border-style:dashed;color:var(--muted);min-height:190px">
+          <span style="font-size:24px;line-height:1">+</span><span style="font-size:13px;font-weight:500;margin-top:6px">Add a resource</span>
+        </button>
+      </div>
+    </div>
   </section>`;
+}
+
+/* ---- Resource editor ---- */
+function resSync(){
+  const d = S.resDraft; if(!d) return;
+  const g = id => document.getElementById(id);
+  if(g("res-title")) d.title = g("res-title").value;
+  if(g("res-desc")) d.desc = g("res-desc").value;
+  if(g("res-type")) d.type = g("res-type").value;
+  if(g("res-status")) d.status = g("res-status").value;
+  document.querySelectorAll("[data-sess]").forEach(row=>{
+    const i = Number(row.dataset.sess);
+    d.sessions[i] = {
+      t: row.querySelector(".st").value,
+      r: row.querySelector(".sr").value,
+      m: Number(row.querySelector(".sm").value)||10
+    };
+  });
+}
+
+function resourceEditor(){
+  if(!S.resEdit) return "";
+  const d = S.resDraft; if(!d) return "";
+  const isNew = S.resEdit==="new";
+  return `<div class="modalwrap"><div class="mscrim" data-res-close></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Edit resource" style="max-width:600px">
+      <div class="mh">
+        <div><h3>${isNew?"Add a resource":"Edit resource"}</h3><div class="s">${isNew?"Build the plan once, publish it to every member":"Changes reach members the moment you save"}</div></div>
+        <button class="x" data-res-close aria-label="Close">&times;</button>
+      </div>
+      <div class="mb">
+        <div class="bigthumb ${thumbLite(d.thumb)}" style="${thumbStyle(d.thumb)};color:#fff">${glyphFor(d.type)}</div>
+        <div class="field"><label>Thumbnail</label>
+          <div class="thumbpick">
+            ${THUMBS.map((t,i)=>`<button data-thumb="${i}" style="background:${t.bg}" aria-pressed="${d.thumb===i}" aria-label="Thumbnail ${i+1}"></button>`).join("")}
+          </div>
+        </div>
+        <div class="field" id="f-restitle"><label for="res-title">Title</label><input id="res-title" value="${d.title.replace(/"/g,"&quot;")}" placeholder="Known: a 5 day reading plan"><span class="err">Give the resource a title.</span></div>
+        <div class="field"><label for="res-type">Type</label><select id="res-type">${RES_TYPES.map(t=>`<option ${t===d.type?"selected":""}>${t}</option>`).join("")}</select></div>
+        <div class="field"><label for="res-desc">Description</label><textarea id="res-desc" placeholder="One or two lines members see under the title">${d.desc}</textarea></div>
+        <div class="field"><label for="res-status">Status</label><select id="res-status">
+          <option ${d.status==="Published"?"selected":""}>Published</option>
+          <option ${d.status==="Draft"?"selected":""}>Draft</option>
+        </select></div>
+        <div class="field">
+          <label>Sessions</label>
+          <div>
+            ${d.sessions.map((sn,i)=>`
+              <div class="sess" data-sess="${i}">
+                <span class="num">${i+1}</span>
+                <input class="st" value="${(sn.t||"").replace(/"/g,"&quot;")}" placeholder="Day 1: title" aria-label="Session title">
+                <input class="sr" value="${(sn.r||"").replace(/"/g,"&quot;")}" placeholder="Passage" aria-label="Passage">
+                <input class="sm" type="number" min="1" style="width:62px" value="${sn.m}" aria-label="Minutes">
+                <span class="acts">
+                  <button class="iconbtn" data-sessmove="${i}" data-dir="-1" aria-label="Move up">&#9650;</button>
+                  <button class="iconbtn" data-sessmove="${i}" data-dir="1" aria-label="Move down">&#9660;</button>
+                  <button class="iconbtn danger" data-sessdel="${i}" aria-label="Remove">&times;</button>
+                </span>
+              </div>`).join("")}
+            <button class="mini" data-sessadd style="margin-top:11px;border-color:var(--accent);color:var(--accent)">Add a session</button>
+          </div>
+        </div>
+      </div>
+      <div class="mf">
+        ${isNew?"":`<button class="mini danger" data-res-del style="color:var(--flag);border-color:rgba(180,83,9,.3)">Delete</button>`}
+        <span class="note">${d.sessions.length} session${d.sessions.length===1?"":"s"} · about ${d.sessions.reduce((t,x)=>t+(Number(x.m)||0),0)} minutes total</span>
+        <button class="btn sec" data-res-close>Cancel</button>
+        <button class="btn" data-res-save>Save</button>
+      </div>
+    </div></div>`;
+}
+
+function saveResource(){
+  resSync();
+  const d = S.resDraft;
+  if(!d.title.trim()){ document.getElementById("f-restitle").classList.add("bad"); return; }
+  if(S.resEdit==="new"){
+    RESOURCES.push({...d, id:"r"+Date.now(), started:0});
+    toast(`${d.title} created${d.status==="Published"?" and published":" as a draft"}.`);
+  } else {
+    const i = RESOURCES.findIndex(r=>r.id===S.resEdit);
+    RESOURCES[i] = {...RESOURCES[i], ...d};
+    toast(`${d.title} updated. Members see it now.`);
+  }
+  S.resEdit=null; S.resDraft=null; render();
 }
 
 function messagesView(){
@@ -1046,6 +1221,8 @@ function staffView(){
             ? `<button class="btn sec" data-kiosk-open>Open kiosk</button><button class="btn">Add Child</button>`
           : S.tab==="giving"
             ? `<button class="btn sec" data-report-open>Run report</button><button class="btn" data-gift-open>Record gift</button>`
+          : S.tab==="resources"
+            ? `<button class="btn" data-res-new>Add a resource</button>`
             : `<button class="btn">${PRIMARY_ACTION[S.tab] || "Add a person"}</button>`}
       </div>
       <div class="content">${body}</div>
@@ -1704,15 +1881,28 @@ function closeDrawer(){ $("drawer").classList.remove("on"); $("scrim").classList
 /* ============================ RENDER ============================ */
 function render(){
   setAccent();
-  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + kioskView() + giftModal() + reportPicker() + reportModal() + toastEl();
+  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + kioskView() + giftModal() + reportPicker() + reportModal() + resourceEditor() + toastEl();
   $("viewStaff").setAttribute("aria-selected", S.view==="staff");
   $("viewMember").setAttribute("aria-selected", S.view==="member");
   const q = $("q"); if(q && S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); }
 }
 
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],[data-gift-open],[data-close-gift],[data-save-gift],[data-report-open],[data-close-rp],[data-period],[data-run-report],[data-quickreport],[data-close-report],[data-export-report],[data-kiosk-open],[data-kiosk-exit],[data-kiosk-again],[data-kiosk-new],[data-kiosk-go],[data-pin],[data-kid],.toggle");
+  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],[data-res],[data-res-new],[data-res-close],[data-res-save],[data-res-del],[data-thumb],[data-sessadd],[data-sessdel],[data-sessmove],[data-gift-open],[data-close-gift],[data-save-gift],[data-report-open],[data-close-rp],[data-period],[data-run-report],[data-quickreport],[data-close-report],[data-export-report],[data-kiosk-open],[data-kiosk-exit],[data-kiosk-again],[data-kiosk-new],[data-kiosk-go],[data-pin],[data-kid],.toggle");
   if(!t) return;
+  if(t.hasAttribute("data-res-new")){ S.resEdit="new"; S.resDraft={title:"",type:"Reading plan",status:"Draft",thumb:0,desc:"",sessions:[{t:"Day 1: ",r:"",m:8}]}; render(); document.getElementById("res-title")?.focus(); return; }
+  if(t.dataset.res){ const r=RESOURCES.find(x=>x.id===t.dataset.res); S.resEdit=r.id; S.resDraft=JSON.parse(JSON.stringify(r)); render(); return; }
+  if(t.hasAttribute("data-res-close")){ S.resEdit=null; S.resDraft=null; render(); return; }
+  if(t.hasAttribute("data-res-save")){ saveResource(); return; }
+  if(t.hasAttribute("data-res-del")){ RESOURCES=RESOURCES.filter(x=>x.id!==S.resEdit); S.resEdit=null; S.resDraft=null; toast("Resource deleted."); render(); return; }
+  if(t.dataset.thumb!==undefined){ resSync(); S.resDraft.thumb=Number(t.dataset.thumb); render(); return; }
+  if(t.hasAttribute("data-sessadd")){ resSync(); S.resDraft.sessions.push({t:"",r:"",m:8}); render(); return; }
+  if(t.dataset.sessdel!==undefined){ resSync(); S.resDraft.sessions.splice(Number(t.dataset.sessdel),1); render(); return; }
+  if(t.dataset.sessmove!==undefined){
+    resSync(); const i=Number(t.dataset.sessmove), j=i+Number(t.dataset.dir), a=S.resDraft.sessions;
+    if(j>=0&&j<a.length){ [a[i],a[j]]=[a[j],a[i]]; render(); }
+    return;
+  }
   if(t.hasAttribute("data-gift-open")){ S.gift=true; S.giftSaved=null; render(); document.getElementById("g-amt")?.focus(); return; }
   if(t.hasAttribute("data-close-gift")){ S.gift=false; S.giftSaved=null; render(); return; }
   if(t.hasAttribute("data-save-gift")){ saveGift(); return; }
@@ -1778,6 +1968,7 @@ document.addEventListener("keydown", e=>{
     if(S.report){S.report=null;render();return;}
     if(S.reportPick){S.reportPick=false;render();return;}
     if(S.gift){S.gift=false;S.giftSaved=null;render();return;}
+    if(S.resEdit){S.resEdit=null;S.resDraft=null;render();return;}
     if(S.editEl){S.editEl=null;render();return;}
     if(S.songModal){S.songModal=null;render();return;}
     if(S.support){S.support=false;S.supportSent=false;render();return;}
