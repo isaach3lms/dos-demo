@@ -440,6 +440,10 @@ const initials = n => n.split(/[\s]+/).filter(w=>w[0]&&/[A-Za-z]/.test(w[0])).sl
 function setAccent(){ document.documentElement.style.setProperty("--accent", CHURCHES[S.church].accent); }
 
 /* ============================ STAFF VIEW ============================ */
+const PRIMARY_ACTION = {
+  services:"New Service"
+};
+
 const NAVS = [
   ["dashboard","Dashboard",IC.dash,null],
   ["people","People",IC.people,"8"],
@@ -710,7 +714,7 @@ function staffView(){
         <button class="btn sec">Search</button>
         ${S.tab==="dashboard"
           ? `<button class="btn" data-support>Request support</button>`
-          : `<button class="btn">Add a person</button>`}
+          : `<button class="btn">${PRIMARY_ACTION[S.tab] || "Add a person"}</button>`}
       </div>
       <div class="content">${body}</div>
     </main>
