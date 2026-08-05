@@ -309,6 +309,27 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   background:var(--ink);color:#fff;font-size:13px;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow-lg);
 }
 
+/* ---------- Giving reports ---------- */
+.rpt{display:grid;gap:16px}
+.rptnums{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.rptnums div{background:var(--mist);border-radius:12px;padding:11px 12px}
+.rptnums .k{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--navy);opacity:.7;font-weight:600}
+.rptnums .v{font-size:18px;font-weight:600;margin-top:3px;font-family:'IBM Plex Mono',monospace;letter-spacing:-.02em}
+.bars{display:flex;align-items:flex-end;gap:7px;height:112px;padding-top:6px}
+.bars .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;height:100%}
+.bars .bar2{width:100%;background:var(--accent);border-radius:5px 5px 0 0;min-height:3px}
+.bars .bl{font-size:9.5px;color:var(--muted-2);font-weight:500;white-space:nowrap}
+.brk{display:grid;gap:8px}
+.brk .r{display:grid;grid-template-columns:1fr auto;gap:10px;font-size:12.5px;align-items:center}
+.brk .track{grid-column:1/-1;height:5px;border-radius:999px;background:var(--mist);overflow:hidden}
+.brk .track i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.periodpick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.periodpick button{border:2px solid var(--line);border-radius:13px;padding:14px 10px;text-align:left}
+.periodpick button:hover{border-color:var(--accent)}
+.periodpick button[aria-pressed="true"]{border-color:var(--accent);background:var(--mist)}
+.periodpick .pt{font-size:13.5px;font-weight:600}
+.periodpick .ps{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.35}
+
 /* ---------- Check in kiosk ---------- */
 .kiosk{position:fixed;inset:0;z-index:100;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px;overflow-y:auto}
 .kiosk .exit{position:absolute;top:18px;right:20px;font-size:12.5px;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.18);padding:7px 13px;border-radius:9px}
@@ -487,6 +508,39 @@ const PEOPLE = [
    next:"Fall group launch planning"}
 ];
 
+/* ---- Giving ---- */
+let MANUAL_GIFTS = [];
+
+const GIVING_WEEKS  = [{l:"Jul 12",a:8420},{l:"Jul 19",a:9310},{l:"Jul 26",a:7980},{l:"Aug 2",a:9140}];
+const GIVING_MONTHS = [{l:"Mar",a:36180},{l:"Apr",a:34920},{l:"May",a:39640},{l:"Jun",a:37110},{l:"Jul",a:39620},{l:"Aug",a:9140}];
+const GIVING_YTD    = [{l:"Jan",a:33410},{l:"Feb",a:31980},{l:"Mar",a:36180},{l:"Apr",a:34920},{l:"May",a:39640},{l:"Jun",a:37110},{l:"Jul",a:39620},{l:"Aug",a:9140}];
+const FUND_SPLIT = [["General",.78],["Building",.09],["Kids ministry",.08],["Missions",.05]];
+const FUNDS = ["General","Building","Kids ministry","Missions"];
+
+function manualTotal(){ return MANUAL_GIFTS.reduce((t,g)=>t+g.amount,0); }
+
+function buildReport(period){
+  const cfg = {
+    weekly:{buckets:GIVING_WEEKS, title:"Weekly giving", range:"July 12 through August 2, 2026", givers:214, newG:5},
+    monthly:{buckets:GIVING_MONTHS, title:"Monthly giving", range:"March through August 2026", givers:286, newG:19},
+    ytd:{buckets:GIVING_YTD, title:"Year to date giving", range:"January 1 through August 5, 2026", givers:341, newG:47}
+  }[period];
+  const base = cfg.buckets.reduce((t,b)=>t+b.a,0);
+  const total = base + manualTotal();
+  const online = Math.round(base*.86);
+  const cash = MANUAL_GIFTS.filter(g=>g.method==="Cash").reduce((t,g)=>t+g.amount, Math.round(base*.06));
+  const check = MANUAL_GIFTS.filter(g=>g.method!=="Cash").reduce((t,g)=>t+g.amount, Math.round(base*.08));
+  return {
+    period, title:cfg.title, range:cfg.range, total, givers:cfg.givers, newG:cfg.newG,
+    avg: Math.round(total/cfg.givers),
+    buckets: cfg.buckets,
+    funds: FUND_SPLIT.map(([n,pct])=>[n, Math.round(total*pct), pct]),
+    methods: [["Online recurring", Math.round(online*.72)],["Online one time", Math.round(online*.28)],["Check", check],["Cash", cash]]
+  };
+}
+
+function money(n){ return "$"+n.toLocaleString(); }
+
 /* ---- Kids check in ---- */
 const KIOSK_FAMILIES = [
   {pin:"4471", family:"Webb", guardian:"Marcus and Dana Webb",
@@ -577,7 +631,7 @@ const IC = {
 };
 
 /* ============================ STATE ============================ */
-const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null, kiosk:null};
+const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null, kiosk:null, gift:false, giftSaved:null, reportPick:false, report:null, reportPeriod:"weekly"};
 const $ = id => document.getElementById(id);
 const app = $("app");
 const initials = n => n.split(/[\s]+/).filter(w=>w[0]&&/[A-Za-z]/.test(w[0])).slice(0,2).map(w=>w[0].toUpperCase()).join("");
@@ -887,19 +941,31 @@ function metrics_kids(){
 
 function givingView(){
   const c = CHURCHES[S.church];
+  const mtd = c.weekly + manualTotal();
+  const online = [["Priya Anand","$400","Recurring · General"],["Kevin and Thao Nguyen","$310","Recurring · General"],["Rachel Kim","$220","Recurring · General"],["Dana Whitfield","$150","Recurring · Kids ministry"],["Alicia Romero","$75","First gift · General"]];
   return `<div class="metrics">
-    ${[["Month to date","$"+c.weekly.toLocaleString(),"Down 3% vs July"],["Recurring givers","148","Up 6 this month"],["Average gift","$127","Flat"],["First time givers","5","Up 2"]].map(x=>`<div class="metric"><div class="k">${x[0]}</div><div class="v">${x[1]}</div><div class="d">${x[2]}</div></div>`).join("")}
+    ${[["Month to date",money(mtd),"Down 3% vs July"],["Recurring givers","148","Up 6 this month"],["Average gift","$127","Flat"],["First time givers","5","Up 2"]].map(x=>`<div class="metric"><div class="k">${x[0]}</div><div class="v">${x[1]}</div><div class="d">${x[2]}</div></div>`).join("")}
   </div>
   <div class="grid-2">
     <section class="card">
-      <div class="hd"><h2>Recent gifts</h2><div class="spacer"></div><button class="mini">Export</button></div>
-      ${[["Priya Anand","$400","Recurring · General"],["Kevin and Thao Nguyen","$310","Recurring · General"],["Rachel Kim","$220","Recurring · General"],["Dana Whitfield","$150","Recurring · Kids ministry"],["Alicia Romero","$75","First gift · General"]].map(g=>`<div class="row"><span class="av">${initials(g[0])}</span><span><span class="rn">${g[0]}</span><span class="rs">${g[2]}</span></span><span class="spacer"></span><b class="mono" style="font-size:13.5px">${g[1]}</b></div>`).join("")}
+      <div class="hd"><h2>Recent gifts</h2><div class="spacer"></div>
+        <button class="mini" data-gift-open>Record a gift</button></div>
+      ${MANUAL_GIFTS.map(g=>`<div class="row"><span class="av solid" style="font-size:9.5px">${g.method==="Cash"?"CASH":"CHK"}</span><span><span class="rn">${g.giver}</span><span class="rs">${g.method}${g.ref?` #${g.ref}`:""} · ${g.fund} · recorded by hand</span></span><span class="spacer"></span><b class="mono" style="font-size:13.5px">${money(g.amount)}</b></div>`).join("")}
+      ${online.map(g=>`<div class="row"><span class="av">${initials(g[0])}</span><span><span class="rn">${g[0]}</span><span class="rs">${g[2]}</span></span><span class="spacer"></span><b class="mono" style="font-size:13.5px">${g[1]}</b></div>`).join("")}
     </section>
-    <section class="card">
-      <div class="hd"><h2>Giving that stopped</h2><div class="spacer"></div><span class="pill warn">2 lapsed</span></div>
-      <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">Lapsed giving is usually a discipleship signal before it is a budget problem.</div>
-      ${[["Chris Vaughn","Stopped after June","$85/mo"],["T. and L. Barrett","Card expired July 2","$60/mo"]].map(g=>`<div class="row"><span class="av">${initials(g[0])}</span><span><span class="rn">${g[0]}</span><span class="rs">${g[1]}</span></span><span class="spacer"></span><span class="pill warn">${g[2]}</span></div>`).join("")}
-    </section>
+    <div style="display:grid;gap:18px">
+      <section class="card">
+        <div class="hd"><h2>Reports</h2><div class="spacer"></div><button class="mini" data-report-open style="border-color:var(--accent);color:var(--accent)">Run report</button></div>
+        <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">Weekly, monthly, or year to date. Cash and checks you record by hand are included in every total.</div>
+        ${[["Weekly giving","Last 4 Sundays","weekly"],["Monthly giving","Last 6 months","monthly"],["Year to date","January 1 through today","ytd"]].map(r=>`
+          <button class="row" data-quickreport="${r[2]}"><span class="av">${IC.give}</span><span><span class="rn">${r[0]}</span><span class="rs">${r[1]}</span></span><span class="spacer"></span><span class="pill ghost">Run</span></button>`).join("")}
+      </section>
+      <section class="card">
+        <div class="hd"><h2>Giving that stopped</h2><div class="spacer"></div><span class="pill warn">2 lapsed</span></div>
+        <div class="bd" style="padding-bottom:6px;color:var(--muted);font-size:12.5px">Lapsed giving is usually a discipleship signal before it is a budget problem.</div>
+        ${[["Chris Vaughn","Stopped after June","$85/mo"],["T. and L. Barrett","Card expired July 2","$60/mo"]].map(g=>`<div class="row"><span class="av">${initials(g[0])}</span><span><span class="rn">${g[0]}</span><span class="rs">${g[1]}</span></span><span class="spacer"></span><span class="pill warn">${g[2]}</span></div>`).join("")}
+      </section>
+    </div>
   </div>`;
 }
 
@@ -978,6 +1044,8 @@ function staffView(){
             ? `<button class="btn" data-newsvc>New Service</button>`
           : S.tab==="kids"
             ? `<button class="btn sec" data-kiosk-open>Open kiosk</button><button class="btn">Add Child</button>`
+          : S.tab==="giving"
+            ? `<button class="btn sec" data-report-open>Run report</button><button class="btn" data-gift-open>Record gift</button>`
             : `<button class="btn">${PRIMARY_ACTION[S.tab] || "Add a person"}</button>`}
       </div>
       <div class="content">${body}</div>
@@ -1160,6 +1228,146 @@ function talkPanel(){
       </div>
     </div>
   </aside>`;
+}
+
+/* ============================ GIVING ============================ */
+function giftModal(){
+  if(!S.gift) return "";
+  if(S.giftSaved){
+    const g = S.giftSaved;
+    return `<div class="modalwrap"><div class="mscrim" data-close-gift></div>
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Gift recorded" style="max-width:420px">
+        <div class="sent">
+          <div class="tick">&#10003;</div>
+          <h3>Gift recorded</h3>
+          <p>${money(g.amount)} ${g.method.toLowerCase()} from ${g.giver}, posted to ${g.fund}. It is on their giving record and their year end statement.</p>
+          <button class="btn" style="margin-top:18px" data-close-gift>Close</button>
+        </div>
+      </div></div>`;
+  }
+  const names = ["Loose cash, no giver","Anonymous check"].concat(PEOPLE.map(p2=>p2.n));
+  return `<div class="modalwrap"><div class="mscrim" data-close-gift></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Record a gift">
+      <div class="mh">
+        <div><h3>Record a gift</h3><div class="s">Cash, check, or anything that did not come through the app</div></div>
+        <button class="x" data-close-gift aria-label="Close">&times;</button>
+      </div>
+      <div class="mb">
+        <div class="field"><label for="g-giver">Who gave</label>
+          <select id="g-giver">${names.map(n=>`<option>${n}</option>`).join("")}</select></div>
+        <div class="field" id="f-amt"><label for="g-amt">Amount</label><input id="g-amt" type="number" min="1" step="0.01" placeholder="250.00"><span class="err">Enter an amount.</span></div>
+        <div class="field"><label for="g-method">Method</label>
+          <select id="g-method"><option>Check</option><option>Cash</option><option>Money order</option><option>Stock or other</option></select></div>
+        <div class="field"><label for="g-ref">Check or reference number</label><input id="g-ref" placeholder="Optional"></div>
+        <div class="field"><label for="g-fund">Fund</label>
+          <select id="g-fund">${FUNDS.map(f=>`<option>${f}</option>`).join("")}</select></div>
+        <div class="field"><label for="g-date">Date received</label><input id="g-date" type="date" value="2026-08-02"></div>
+        <div class="field"><label for="g-note">Note for the record</label><input id="g-note" placeholder="Sunday offering, counted by two people"></div>
+      </div>
+      <div class="mf">
+        <span class="note">Posts to the giver's record and their statement</span>
+        <button class="btn sec" data-close-gift>Cancel</button>
+        <button class="btn" data-save-gift>Record gift</button>
+      </div>
+    </div></div>`;
+}
+
+function saveGift(){
+  const v = id => document.getElementById(id).value;
+  const amount = Number(v("g-amt"));
+  if(!amount || amount<=0){ document.getElementById("f-amt").classList.add("bad"); return; }
+  const g = {giver:v("g-giver"), amount, method:v("g-method"), ref:v("g-ref"), fund:v("g-fund"), date:v("g-date"), note:v("g-note")};
+  MANUAL_GIFTS.unshift(g);
+  S.giftSaved = g; render();
+}
+
+function reportPicker(){
+  if(!S.reportPick) return "";
+  const opts = [
+    ["weekly","Weekly","Last 4 Sundays, week by week"],
+    ["monthly","Monthly","Last 6 months, month by month"],
+    ["ytd","Year to date","January 1 through today"]
+  ];
+  return `<div class="modalwrap"><div class="mscrim" data-close-rp></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Run a report" style="max-width:520px">
+      <div class="mh"><div><h3>Run a report</h3><div class="s">Pick a period. Every report includes cash and checks you recorded by hand.</div></div>
+        <button class="x" data-close-rp aria-label="Close">&times;</button></div>
+      <div class="mb">
+        <div class="periodpick">
+          ${opts.map(o=>`<button data-period="${o[0]}" aria-pressed="${S.reportPeriod===o[0]}"><div class="pt">${o[1]}</div><div class="ps">${o[2]}</div></button>`).join("")}
+        </div>
+        <div class="field"><label for="rp-fund">Fund</label>
+          <select id="rp-fund"><option>All funds</option>${FUNDS.map(f=>`<option>${f}</option>`).join("")}</select></div>
+      </div>
+      <div class="mf">
+        <span class="note">Exports to CSV for your bookkeeper</span>
+        <button class="btn sec" data-close-rp>Cancel</button>
+        <button class="btn" data-run-report>Run report</button>
+      </div>
+    </div></div>`;
+}
+
+function reportModal(){
+  if(!S.report) return "";
+  const r = S.report;
+  const max = Math.max(...r.buckets.map(b=>b.a));
+  const floor = Math.min(...r.buckets.map(b=>b.a))*0.55;
+  const mTotal = r.methods.reduce((t,m)=>t+m[1],0);
+  return `<div class="modalwrap"><div class="mscrim" data-close-report></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Giving report" style="max-width:620px">
+      <div class="mh"><div><h3>${r.title}</h3><div class="s">${r.range} · ${CHURCHES[S.church].name}</div></div>
+        <button class="x" data-close-report aria-label="Close">&times;</button></div>
+      <div class="mb">
+        <div class="rpt">
+          <div class="rptnums">
+            <div><div class="k">Total</div><div class="v">${money(r.total)}</div></div>
+            <div><div class="k">Givers</div><div class="v">${r.givers}</div></div>
+            <div><div class="k">Average</div><div class="v">${money(r.avg)}</div></div>
+            <div><div class="k">New givers</div><div class="v">${r.newG}</div></div>
+          </div>
+          <div>
+            <div class="eyebrow" style="margin-bottom:2px">By ${r.period==="weekly"?"week":"month"}</div>
+            <div class="bars">
+              ${r.buckets.map(b=>`<div class="col"><div class="bar2" style="height:${Math.max(6, Math.round((b.a-floor)/(max-floor)*100))}%"></div><div class="bl">${b.l}</div></div>`).join("")}
+            </div>
+          </div>
+          <div>
+            <div class="eyebrow" style="margin-bottom:8px">By fund</div>
+            <div class="brk">
+              ${r.funds.map(f=>`<div><div class="r"><span>${f[0]}</span><b class="mono">${money(f[1])}</b></div><div class="track"><i style="width:${Math.round(f[2]*100)}%"></i></div></div>`).join("")}
+            </div>
+          </div>
+          <div>
+            <div class="eyebrow" style="margin-bottom:8px">By method</div>
+            <div class="brk">
+              ${r.methods.map(m=>`<div><div class="r"><span>${m[0]}</span><b class="mono">${money(m[1])}</b></div><div class="track"><i style="width:${Math.round(m[1]/mTotal*100)}%"></i></div></div>`).join("")}
+            </div>
+          </div>
+          ${MANUAL_GIFTS.length?`<p style="font-size:12px;color:var(--muted);margin:0;line-height:1.5">Includes ${MANUAL_GIFTS.length} gift${MANUAL_GIFTS.length===1?"":"s"} recorded by hand this period, totaling ${money(manualTotal())}.</p>`:""}
+        </div>
+      </div>
+      <div class="mf">
+        <span class="note">Year end giving statements come from this same data</span>
+        <button class="btn sec" data-export-report>Export CSV</button>
+        <button class="btn" data-close-report>Done</button>
+      </div>
+    </div></div>`;
+}
+
+function exportReport(){
+  const r = S.report; if(!r) return;
+  const rows = [["Report", r.title],["Range", r.range],["Church", CHURCHES[S.church].name],[],
+    ["Total", r.total],["Givers", r.givers],["Average gift", r.avg],["New givers", r.newG],[],
+    ["Period","Amount"], ...r.buckets.map(b=>[b.l,b.a]), [],
+    ["Fund","Amount"], ...r.funds.map(f=>[f[0],f[1]]), [],
+    ["Method","Amount"], ...r.methods.map(m=>[m[0],m[1]])];
+  const csv = rows.map(row=>row.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const url = URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  const a = document.createElement("a");
+  a.href=url; a.download=`giving-${r.period}-2026.csv`; a.click();
+  URL.revokeObjectURL(url);
+  toast("CSV downloaded. Send it straight to your bookkeeper.");
+  render();
 }
 
 /* ============================ CHECK IN KIOSK ============================ */
@@ -1496,15 +1704,25 @@ function closeDrawer(){ $("drawer").classList.remove("on"); $("scrim").classList
 /* ============================ RENDER ============================ */
 function render(){
   setAccent();
-  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + kioskView() + toastEl();
+  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + kioskView() + giftModal() + reportPicker() + reportModal() + toastEl();
   $("viewStaff").setAttribute("aria-selected", S.view==="staff");
   $("viewMember").setAttribute("aria-selected", S.view==="member");
   const q = $("q"); if(q && S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); }
 }
 
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],[data-kiosk-open],[data-kiosk-exit],[data-kiosk-again],[data-kiosk-new],[data-kiosk-go],[data-pin],[data-kid],.toggle");
+  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],[data-gift-open],[data-close-gift],[data-save-gift],[data-report-open],[data-close-rp],[data-period],[data-run-report],[data-quickreport],[data-close-report],[data-export-report],[data-kiosk-open],[data-kiosk-exit],[data-kiosk-again],[data-kiosk-new],[data-kiosk-go],[data-pin],[data-kid],.toggle");
   if(!t) return;
+  if(t.hasAttribute("data-gift-open")){ S.gift=true; S.giftSaved=null; render(); document.getElementById("g-amt")?.focus(); return; }
+  if(t.hasAttribute("data-close-gift")){ S.gift=false; S.giftSaved=null; render(); return; }
+  if(t.hasAttribute("data-save-gift")){ saveGift(); return; }
+  if(t.hasAttribute("data-report-open")){ S.reportPick=true; render(); return; }
+  if(t.hasAttribute("data-close-rp")){ S.reportPick=false; render(); return; }
+  if(t.dataset.period){ S.reportPeriod=t.dataset.period; render(); return; }
+  if(t.hasAttribute("data-run-report")){ S.reportPick=false; S.report=buildReport(S.reportPeriod); render(); return; }
+  if(t.dataset.quickreport){ S.reportPeriod=t.dataset.quickreport; S.report=buildReport(t.dataset.quickreport); render(); return; }
+  if(t.hasAttribute("data-close-report")){ S.report=null; render(); return; }
+  if(t.hasAttribute("data-export-report")){ exportReport(); return; }
   if(t.hasAttribute("data-kiosk-open")){ openKiosk(); return; }
   if(t.hasAttribute("data-kiosk-exit")){ S.kiosk=null; render(); return; }
   if(t.hasAttribute("data-kiosk-again")){ kioskReset(); return; }
@@ -1557,6 +1775,9 @@ document.addEventListener("keydown", e=>{
   if(e.key==="Escape"){
     closeDrawer();
     if(S.kiosk){S.kiosk=null;render();return;}
+    if(S.report){S.report=null;render();return;}
+    if(S.reportPick){S.reportPick=false;render();return;}
+    if(S.gift){S.gift=false;S.giftSaved=null;render();return;}
     if(S.editEl){S.editEl=null;render();return;}
     if(S.songModal){S.songModal=null;render();return;}
     if(S.support){S.support=false;S.supportSent=false;render();return;}
