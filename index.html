@@ -322,7 +322,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .rescard .rd{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45;flex:1}
 .rescard .rf{display:flex;align-items:center;gap:8px;margin-top:11px}
 .rescard .rf .m{font-size:11.5px;color:var(--muted-2);margin-left:auto}
-.thumbpick{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.thumbpick{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
 .thumbpick button{aspect-ratio:1;border-radius:11px;border:2px solid transparent}
 .thumbpick button[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 2px #fff inset}
 .sess{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px dashed var(--line-soft)}
@@ -331,6 +331,30 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .sess .st{flex:1;min-width:0}
 .sess .sr{width:118px;flex:none}
 .sess .acts{display:flex;gap:4px;flex:none}
+.upload{display:grid;place-items:center;border:2px dashed var(--line);border-radius:11px;color:var(--muted-2);font-size:20px;background:#fff;aspect-ratio:1}
+.upload:hover{border-color:var(--accent);color:var(--accent)}
+.planhero{padding:0}
+.planhero .banner{aspect-ratio:3/1;display:grid;place-items:center;position:relative}
+.planhero .banner .glyph{width:52px;height:52px;color:#fff}
+.dayrow{display:flex;align-items:center;gap:13px;padding:13px 22px;border-top:1px solid var(--line-soft);width:100%;text-align:left}
+.dayrow:hover{background:#FAFBFF}
+.dayrow .dn{width:34px;height:34px;border-radius:50%;background:var(--mist);color:var(--navy);display:grid;place-items:center;font-size:12.5px;font-weight:600;flex:none;font-family:'IBM Plex Mono',monospace}
+.dayrow.done .dn{background:var(--good-bg);color:var(--good)}
+.dayrow .dt{font-size:13.5px;font-weight:500;display:block}
+.dayrow .ds{font-size:11.5px;color:var(--muted);margin-top:1px;display:block}
+.reader{max-width:560px}
+.reader .rhero{aspect-ratio:5/1;max-height:110px;display:grid;place-items:center;color:#fff}
+.reader .rbodytext{padding:22px 26px 8px}
+.reader .eyebrow2{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--accent)}
+.reader h3{margin:8px 0 0;font-size:21px;font-weight:600;letter-spacing:-.02em;line-height:1.25}
+.reader .ref{display:inline-block;margin-top:9px;font-size:12px;font-weight:600;color:var(--navy);background:var(--mist);padding:4px 10px;border-radius:999px}
+.reader .article{font-size:15px;line-height:1.72;color:var(--ink);margin-top:16px}
+.reader .article p{margin:0 0 14px}
+.reader .block{background:#FAFBFF;border:1px solid var(--line-soft);border-radius:var(--r);padding:15px 16px;margin-top:6px}
+.reader .block .bl{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--muted-2)}
+.reader .block .bt{font-size:14.5px;line-height:1.55;margin-top:7px}
+.reader .nav{display:flex;gap:9px;align-items:center;padding:14px 26px;border-top:1px solid var(--line);background:#FAFBFF}
+.reader .nav .sp{flex:1;font-size:11.5px;color:var(--muted-2)}
 .bigthumb{aspect-ratio:5/1;max-height:118px;border-radius:14px;display:grid;place-items:center;margin-bottom:4px}
 .bigthumb .glyph{width:42px;height:42px}
 
@@ -545,22 +569,109 @@ const THUMBS = [
 const RES_TYPES = ["Reading plan","Course","Bible study","Training","Devotional","Next steps path"];
 
 let RESOURCES = [
-  {id:"r1", title:"Known: a 5 day reading plan", type:"Reading plan", status:"Published", thumb:0, started:218,
+  {id:"r1", title:"Known: a 5 day reading plan", type:"Reading plan", status:"Published", thumb:0, custom:null, started:218,
    desc:"Companion plan for the Known series. One passage and one question a day.",
-   sessions:[{t:"Day 1: Searched and known",r:"Psalm 139:1-6",m:6},{t:"Day 2: Nowhere to hide",r:"Psalm 139:7-12",m:6},{t:"Day 3: Formed on purpose",r:"Psalm 139:13-16",m:7},{t:"Day 4: Known by name",r:"John 10:1-15",m:8},{t:"Day 5: Known and sent",r:"John 15:9-17",m:8}]},
-  {id:"r2", title:"Your first 30 days", type:"Next steps path", status:"Published", thumb:3, started:41,
+   sessions:[
+     {t:"Day 1: Searched and known", r:"Psalm 139:1-6", m:6,
+      body:"There is a difference between being watched and being known. One makes you smaller. The other makes you safe.\n\nDavid opens this psalm with a God who has already searched him and already knows. Not the version he manages in public. The sitting down and the getting up. The word before it leaves his mouth. Nothing about David is news to God.\n\nMost of us spend enormous energy managing what people know about us. Today, notice how much of that energy is wasted on a God who already saw all of it and did not leave.",
+      q:"What is one part of your life you would rather God not look at directly?",
+      pray:"God, you already know. Help me stop performing for someone who has seen everything and stayed."},
+     {t:"Day 2: Nowhere to hide", r:"Psalm 139:7-12", m:6,
+      body:"David runs through every escape route he can imagine. Up, down, east, the far side of the sea, total darkness. Each one ends the same way: you are already there.\n\nRead it as a threat and it is suffocating. Read it as a promise and it is the most stable thing in your life. The difference is not the verse. It is what you believe about the character of the one who followed you.\n\nThere is no room you can walk into today where you arrive alone.",
+      q:"Where have you been trying to go where you hoped God would not follow?",
+      pray:"God, I stop running today. Meet me where I actually am, not where I pretend to be."},
+     {t:"Day 3: Formed on purpose", r:"Psalm 139:13-16", m:7,
+      body:"Knit together. Written down before a single day of it happened. This is not language for an accident.\n\nWe are fluent in the vocabulary of self-improvement and almost illiterate in the vocabulary of being made. One says you are a project to be fixed. The other says you are a person who was intended.\n\nYou can work on yourself for the rest of your life and never once feel intended. That has to come from somewhere outside you.",
+      q:"What would change this week if you actually believed you were intended, not accidental?",
+      pray:"God, you made me on purpose. Let that settle deeper than the voice that says I am a problem to solve."},
+     {t:"Day 4: Known by name", r:"John 10:1-15", m:8,
+      body:"Jesus describes a shepherd who calls his own sheep by name and leads them out. Not by number. Not by the group. By name.\n\nThen he says something that costs him everything: the good shepherd lays down his life for the sheep. Being known here is not surveillance. It is somebody willing to stand between you and what is coming.\n\nA hired hand runs when it gets expensive. Jesus is telling you which one he is before you ever need to find out.",
+      q:"Who in your life knows your name and not just your role?",
+      pray:"Jesus, you call me by name. Teach me to recognize your voice over the louder ones."},
+     {t:"Day 5: Known and sent", r:"John 15:9-17", m:8,
+      body:"Jesus moves the relationship. Not servants, who do not know what the master is doing. Friends, who have been told everything.\n\nThen he sends them. Being known was never the destination. It was the ground to stand on so that they could go and bear fruit that lasts.\n\nThis is where a reading plan either ends or actually starts. You have spent five days on being known. The question now is what you do with the person next to you who is not sure anyone knows them at all.",
+      q:"Who is one person this week who needs to be known, and what will you actually do about it?",
+      pray:"Jesus, you called me friend. Send me to someone who has not heard that yet."}
+   ]},
+  {id:"r2", title:"Your first 30 days", type:"Next steps path", status:"Published", thumb:3, custom:null, started:41,
    desc:"What to expect, who to meet, and the three steps we ask every new guest to take.",
-   sessions:[{t:"Week 1: Who we are",r:"Welcome video",m:9},{t:"Week 2: Find a group",r:"Group finder",m:12},{t:"Week 3: Meet the team",r:"Coffee invite",m:10},{t:"Week 4: Take a next step",r:"Next Steps class",m:15}]},
-  {id:"r3", title:"Leading a group well", type:"Training", status:"Published", thumb:1, started:12,
+   sessions:[
+     {t:"Week 1: Who we are", r:"Welcome video", m:9,
+      body:"You do not need to know anyone here to belong here. That sounds like a slogan until somebody proves it to you, so here is how we try to.\n\nThis week is about orientation, not commitment. Watch the welcome video, learn who is on staff, and find out what actually happens on a Sunday morning. Nobody is going to ask you for anything.",
+      q:"What made you walk in the door the first time?",
+      pray:"God, thank you for whatever brought me here. Show me what is next."},
+     {t:"Week 2: Find a group", r:"Group finder", m:12,
+      body:"A church of four hundred can feel like a crowd until you are known by eight of them. Groups are how a big room gets small.\n\nUse the group finder to sort by night, neighborhood, and season of life. Visit one before you decide anything. Nobody signs a contract.",
+      q:"What has kept you from joining a group before?",
+      pray:"God, give me the nerve to walk into a room where I do not know anyone."},
+     {t:"Week 3: Meet the team", r:"Coffee invite", m:10,
+      body:"Every week somebody on our staff has coffee with people who are new. No agenda, no pitch, no ask.\n\nThe reason is simple. It is hard to trust an institution and easy to trust a person. Take the coffee.",
+      q:"What is one honest question about this church you have not asked out loud?",
+      pray:"God, help me ask the real question instead of the polite one."},
+     {t:"Week 4: Take a next step", r:"Next Steps class", m:15,
+      body:"Thirty days in, the question stops being what you think of us and starts being what you do next.\n\nNext Steps is one lunch. We cover what we believe, how we are structured, and the three ways people usually plug in: a group, a serving team, and generosity. Come and decide nothing if you want.",
+      q:"Which of the three is the one you are avoiding, and why?",
+      pray:"God, I do not want to stay a spectator. Show me the step that is actually mine."}
+   ]},
+  {id:"r3", title:"Leading a group well", type:"Training", status:"Published", thumb:1, custom:null, started:12,
    desc:"Six lessons every group leader completes before their first meeting.",
-   sessions:[{t:"Lesson 1: What a group is for",r:"Acts 2:42-47",m:14},{t:"Lesson 2: Asking better questions",r:"Facilitation",m:12},{t:"Lesson 3: Handling hard moments",r:"Care and referral",m:16},{t:"Lesson 4: Multiplying leaders",r:"2 Timothy 2:2",m:13},{t:"Lesson 5: Prayer in a group",r:"Practice",m:10},{t:"Lesson 6: Your first six weeks",r:"Planning",m:15}]},
-  {id:"r4", title:"Money and faith", type:"Bible study", status:"Published", thumb:4, started:64,
+   sessions:[
+     {t:"Lesson 1: What a group is for", r:"Acts 2:42-47", m:14,
+      body:"A group is not a class with snacks. Acts describes people devoted to teaching, to each other, to the table, and to prayer, and then it says they were together and had everything in common.\n\nYour job is not to be the smartest person in the room. It is to build a room where people tell the truth and come back next week.",
+      q:"What do you want people to say about your group in six months?",
+      pray:"God, make my group a place where the truth is safe."},
+     {t:"Lesson 2: Asking better questions", r:"Facilitation", m:12,
+      body:"The fastest way to kill a discussion is a question with a right answer. The fastest way to open one is a question only that person can answer.\n\nSwap what does this verse mean for where does this land in your week. Then count to ten in your head before you rescue the silence.",
+      q:"Write one question you will open with. Does it have a right answer?",
+      pray:"God, help me listen longer than is comfortable."},
+     {t:"Lesson 3: Handling hard moments", r:"Care and referral", m:16,
+      body:"Someone will eventually say something you are not equipped for. A marriage coming apart. A diagnosis. A confession.\n\nYou are not the counselor. You are the person who does not flinch, stays present, and knows who to call. That is enough, and pretending to be more than that does real damage.",
+      q:"Who would you call tonight if someone in your group was in crisis?",
+      pray:"God, give me steadiness when the room gets heavy."},
+     {t:"Lesson 4: Multiplying leaders", r:"2 Timothy 2:2", m:13,
+      body:"Paul tells Timothy to entrust what he heard to reliable people who will teach others. That is four generations in one sentence.\n\nFrom your first meeting, watch for the person who shows up early and stays late. Hand them something small. Then something bigger.",
+      q:"Who in your group could be leading one within a year?",
+      pray:"God, help me build people, not attendance."},
+     {t:"Lesson 5: Prayer in a group", r:"Practice", m:10,
+      body:"Most groups spend fifty minutes talking and four minutes praying, then wonder why it feels like a book club.\n\nStart with prayer instead of ending with it. Keep a list. Follow up on last week's requests out loud so people learn that what they said was heard.",
+      q:"What would change if you gave prayer a third of your time?",
+      pray:"God, teach us to talk to you as easily as we talk about you."},
+     {t:"Lesson 6: Your first six weeks", r:"Planning", m:15,
+      body:"Plan the first six weeks before week one. Where you meet, who brings what, what you are studying, and how it ends.\n\nAmbiguity kills groups faster than bad teaching. People will commit to something specific and finite far more readily than to something open ended.",
+      q:"What are your six weeks, specifically?",
+      pray:"God, help me steward these people's time well."}
+   ]},
+  {id:"r4", title:"Money and faith", type:"Bible study", status:"Published", thumb:4, custom:null, started:64,
    desc:"Four weeks on generosity, debt, contentment, and giving as worship.",
-   sessions:[{t:"Week 1: Who owns it",r:"Psalm 24:1",m:18},{t:"Week 2: Debt and freedom",r:"Proverbs 22:7",m:18},{t:"Week 3: Contentment",r:"Philippians 4:10-13",m:16},{t:"Week 4: Giving as worship",r:"2 Corinthians 9",m:20}]},
-  {id:"r5", title:"Baptism: what it means", type:"Course", status:"Draft", thumb:5, started:0,
+   sessions:[
+     {t:"Week 1: Who owns it", r:"Psalm 24:1", m:18,
+      body:"The earth is the Lord's and everything in it. If that is true, then the conversation is not about how much of your money you give away. It is about how much of God's money you keep.\n\nThat single reframe changes the entire tone of every budget conversation you will have this month.",
+      q:"If you managed rather than owned, what line in your budget would change first?",
+      pray:"God, it was never mine. Help me hold it that way."},
+     {t:"Week 2: Debt and freedom", r:"Proverbs 22:7", m:18,
+      body:"The borrower is servant to the lender. Not a moral judgment, a description of how it actually feels at 2am.\n\nDebt is not a sin. It is a constraint on your freedom to say yes to God quickly. Most people cannot be generous because they are already committed.",
+      q:"What is one payment that is currently deciding your future for you?",
+      pray:"God, give me the patience to get free rather than the shortcut that digs deeper."},
+     {t:"Week 3: Contentment", r:"Philippians 4:10-13", m:16,
+      body:"Paul says he learned contentment. Learned. It was not his temperament, it was a skill he acquired in both plenty and need.\n\nWhich means discontent is not a personality trait you are stuck with either.",
+      q:"What are you currently telling yourself you need in order to be content?",
+      pray:"God, teach me the thing Paul had to learn."},
+     {t:"Week 4: Giving as worship", r:"2 Corinthians 9", m:20,
+      body:"Paul describes giving that is decided in advance, not under pressure, and cheerful. All three matter, and most of us miss at least two.\n\nGiving that happens only when you feel moved is not generosity. It is mood. Deciding in advance is what turns it into worship.",
+      q:"What will you decide in advance this month, before you feel anything?",
+      pray:"God, make me a cheerful giver, not a guilty one."}
+   ]},
+  {id:"r5", title:"Baptism: what it means", type:"Course", status:"Draft", thumb:5, custom:null, started:0,
    desc:"Short course for anyone considering baptism. Not published yet.",
-   sessions:[{t:"Part 1: Why we baptize",r:"Matthew 28:18-20",m:11}]}
+   sessions:[
+     {t:"Part 1: Why we baptize", r:"Matthew 28:18-20", m:11,
+      body:"Jesus' last instruction included baptizing. It is not an upgrade for advanced Christians. It is the front door.\n\nBaptism does not save you. It announces publicly what has already happened privately, in front of people who will hold you to it.",
+      q:"What is keeping you from doing this publicly?",
+      pray:"God, give me courage to say out loud what I already believe."}
+   ]}
 ];
+
+let RES_DONE = {};
 
 /* ---- Giving ---- */
 let MANUAL_GIFTS = [];
@@ -685,7 +796,7 @@ const IC = {
 };
 
 /* ============================ STATE ============================ */
-const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null, kiosk:null, gift:false, giftSaved:null, reportPick:false, report:null, reportPeriod:"weekly", resEdit:null, resDraft:null};
+const S = {view:"staff", church:0, tab:"dashboard", stageFilter:null, q:"", memberTab:"home", talk:false, amount:100, support:false, supportSent:false, service:"s1", editEl:null, songModal:null, toast:null, kiosk:null, gift:false, giftSaved:null, reportPick:false, report:null, reportPeriod:"weekly", resEdit:null, resDraft:null, resView:null, resRead:null, editSession:null};
 const $ = id => document.getElementById(id);
 const app = $("app");
 const initials = n => n.split(/[\s]+/).filter(w=>w[0]&&/[A-Za-z]/.test(w[0])).slice(0,2).map(w=>w[0].toUpperCase()).join("");
@@ -1031,8 +1142,11 @@ const RES_GLYPH = {
   "Devotional":'<svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.4-7-9.4A4.1 4.1 0 0112 9a4.1 4.1 0 017 2.6c0 5-7 9.4-7 9.4z"/></svg>',
   "Next steps path":'<svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 18h5v-5h5V8h6"/><path d="M17 5l3 3-3 3"/></svg>'
 };
-function thumbStyle(i){ const t = THUMBS[i] || THUMBS[0]; return `background:${t.bg}`; }
-function thumbLite(i){ return (THUMBS[i]||THUMBS[0]).lite ? "lite" : ""; }
+function thumbStyle(i, custom){
+  if(custom) return `background-image:url(${custom});background-size:cover;background-position:center`;
+  const t = THUMBS[i] || THUMBS[0]; return `background:${t.bg}`;
+}
+function thumbLite(i, custom){ return (!custom && (THUMBS[i]||THUMBS[0]).lite) ? "lite" : ""; }
 function glyphFor(type){ return RES_GLYPH[type] || RES_GLYPH["Reading plan"]; }
 
 function resourcesView(){
@@ -1045,8 +1159,8 @@ function resourcesView(){
     <div class="bd" style="padding-top:8px">
       <div class="resgrid">
         ${RESOURCES.map(r=>`
-          <button class="rescard" data-res="${r.id}">
-            <span class="thumb ${thumbLite(r.thumb)}" style="${thumbStyle(r.thumb)};color:#fff">
+          <button class="rescard" data-plan="${r.id}">
+            <span class="thumb ${thumbLite(r.thumb,r.custom)}" style="${thumbStyle(r.thumb,r.custom)};color:#fff">
               ${glyphFor(r.type)}
               <span class="badge">${r.status}</span>
             </span>
@@ -1057,6 +1171,10 @@ function resourcesView(){
                 <span class="pill">${r.type}</span>
                 <span class="m">${r.sessions.length} ${r.sessions.length===1?"session":"sessions"}${r.started?` · ${r.started} started`:""}</span>
               </span>
+              <span class="rf" style="margin-top:9px">
+                <span class="mini" data-res="${r.id}">Edit plan</span>
+                <span class="m" style="font-size:11.5px;color:var(--muted-2)">Click card to open</span>
+              </span>
             </span>
           </button>`).join("")}
         <button class="rescard" data-res-new style="display:grid;place-items:center;padding:26px;border-style:dashed;color:var(--muted);min-height:190px">
@@ -1065,6 +1183,81 @@ function resourcesView(){
       </div>
     </div>
   </section>`;
+}
+
+/* ---- Plan overview and reader ---- */
+function doneSet(id){ return RES_DONE[id] || (RES_DONE[id]=[]); }
+
+function planView(){
+  if(!S.resView || S.resRead) return "";
+  const r = RESOURCES.find(x=>x.id===S.resView); if(!r) return "";
+  const done = doneSet(r.id);
+  const pct = Math.round(done.length/r.sessions.length*100);
+  return `<div class="modalwrap"><div class="mscrim" data-plan-close></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="${r.title}" style="max-width:540px">
+      <div class="planhero">
+        <div class="banner ${thumbLite(r.thumb,r.custom)}" style="${thumbStyle(r.thumb,r.custom)}">
+          ${r.custom?"":glyphFor(r.type)}
+          <button class="x" data-plan-close aria-label="Close" style="position:absolute;top:10px;right:12px;color:#fff;font-size:22px;background:rgba(11,16,38,.35);border-radius:8px;padding:2px 9px">&times;</button>
+        </div>
+      </div>
+      <div class="mb" style="gap:10px">
+        <div>
+          <div class="eyebrow">${r.type} · ${r.sessions.length} ${r.sessions.length===1?"session":"sessions"}</div>
+          <h3 style="margin:6px 0 0;font-size:20px;font-weight:600;letter-spacing:-.02em">${r.title}</h3>
+          <p style="margin:7px 0 0;font-size:13px;color:var(--muted);line-height:1.55">${r.desc}</p>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)"><span>${done.length} of ${r.sessions.length} complete</span><b class="mono">${pct}%</b></div>
+          <div class="prog" style="margin-top:6px"><i style="width:${pct}%"></i></div>
+        </div>
+      </div>
+      <div style="overflow-y:auto">
+        ${r.sessions.map((sn,i)=>`
+          <button class="dayrow ${done.includes(i)?"done":""}" data-read="${r.id}|${i}">
+            <span class="dn">${done.includes(i)?"&#10003;":i+1}</span>
+            <span style="flex:1"><span class="dt">${sn.t||"Untitled session"}</span><span class="ds">${sn.r||"No passage set"} · ${sn.m} min</span></span>
+            <span class="pill ghost">${done.includes(i)?"Done":"Read"}</span>
+          </button>`).join("")}
+      </div>
+      <div class="mf">
+        <span class="note">${r.started} people started this plan</span>
+        <button class="btn sec" data-res-edit="${r.id}">Edit plan</button>
+        <button class="btn" data-read="${r.id}|${Math.min(done.length, r.sessions.length-1)}">${done.length?"Continue":"Start"}</button>
+      </div>
+    </div></div>`;
+}
+
+function readerView(){
+  if(!S.resRead) return "";
+  const [id, idx] = S.resRead.split("|");
+  const r = RESOURCES.find(x=>x.id===id); if(!r) return "";
+  const i = Number(idx); const sn = r.sessions[i]; if(!sn) return "";
+  const done = doneSet(r.id);
+  const paras = (sn.body||"Content for this session has not been written yet. Open the editor and add it.").split("\n\n");
+  return `<div class="modalwrap"><div class="mscrim" data-reader-close></div>
+    <div class="modal reader" role="dialog" aria-modal="true" aria-label="${sn.t}">
+      <div class="rhero ${thumbLite(r.thumb,r.custom)}" style="${thumbStyle(r.thumb,r.custom)};position:relative">
+        <button class="x" data-reader-close aria-label="Close" style="position:absolute;top:10px;right:12px;color:#fff;font-size:22px;background:rgba(11,16,38,.35);border-radius:8px;padding:2px 9px">&times;</button>
+      </div>
+      <div class="mb" style="padding:0;display:block;overflow-y:auto">
+        <div class="rbodytext">
+          <div class="eyebrow2">${r.title} · ${i+1} of ${r.sessions.length}</div>
+          <h3>${sn.t||"Untitled session"}</h3>
+          ${sn.r?`<span class="ref">${sn.r}</span>`:""}
+          <div class="article">${paras.map(x=>`<p>${x}</p>`).join("")}</div>
+          ${sn.q?`<div class="block"><div class="bl">Reflect</div><div class="bt">${sn.q}</div></div>`:""}
+          ${sn.pray?`<div class="block" style="margin-top:10px;margin-bottom:18px"><div class="bl">Pray</div><div class="bt">${sn.pray}</div></div>`:""}
+        </div>
+      </div>
+      <div class="nav">
+        <button class="mini" data-read-jump="${i-1}" ${i===0?"disabled style=opacity:.35":""}>Previous</button>
+        <span class="sp" style="text-align:center">${sn.m} min read</span>
+        ${i<r.sessions.length-1
+          ? `<button class="btn" data-read-done="${i}">${done.includes(i)?"Next":"Mark complete"}</button>`
+          : `<button class="btn" data-read-done="${i}">Finish plan</button>`}
+      </div>
+    </div></div>`;
 }
 
 /* ---- Resource editor ---- */
@@ -1078,6 +1271,7 @@ function resSync(){
   document.querySelectorAll("[data-sess]").forEach(row=>{
     const i = Number(row.dataset.sess);
     d.sessions[i] = {
+      ...d.sessions[i],
       t: row.querySelector(".st").value,
       r: row.querySelector(".sr").value,
       m: Number(row.querySelector(".sm").value)||10
@@ -1085,9 +1279,45 @@ function resSync(){
   });
 }
 
+function contentEditor(){
+  const d = S.resDraft; const i = S.editSession;
+  const sn = d.sessions[i]; if(!sn) return "";
+  return `<div class="modalwrap"><div class="mscrim" data-content-back></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Write content" style="max-width:600px">
+      <div class="mh">
+        <div><h3>Session ${i+1} content</h3><div class="s">${d.title||"Untitled resource"} · this is what members read</div></div>
+        <button class="x" data-content-back aria-label="Back">&times;</button>
+      </div>
+      <div class="mb">
+        <div class="field"><label for="c-title">Session title</label><input id="c-title" value="${(sn.t||"").replace(/"/g,"&quot;")}"></div>
+        <div class="field"><label for="c-ref">Passage or reference</label><input id="c-ref" value="${(sn.r||"").replace(/"/g,"&quot;")}"></div>
+        <div class="field"><label for="c-body">Article</label><textarea id="c-body" style="min-height:210px" placeholder="Write the devotional. Leave a blank line between paragraphs.">${sn.body||""}</textarea></div>
+        <div class="field"><label for="c-q">Reflection question</label><input id="c-q" value="${(sn.q||"").replace(/"/g,"&quot;")}"></div>
+        <div class="field"><label for="c-pray">Prayer</label><input id="c-pray" value="${(sn.pray||"").replace(/"/g,"&quot;")}"></div>
+        <div class="field"><label for="c-mins">Minutes</label><input id="c-mins" type="number" min="1" value="${sn.m}"></div>
+      </div>
+      <div class="mf">
+        <span class="note">Members see this exactly as written</span>
+        <button class="btn sec" data-content-back>Back</button>
+        <button class="btn" data-content-save>Save content</button>
+      </div>
+    </div></div>`;
+}
+
+function saveContent(){
+  const d = S.resDraft, i = S.editSession;
+  const g = id => document.getElementById(id);
+  d.sessions[i] = {
+    t:g("c-title").value, r:g("c-ref").value, body:g("c-body").value,
+    q:g("c-q").value, pray:g("c-pray").value, m:Math.max(1, Number(g("c-mins").value)||8)
+  };
+  S.editSession = null; toast("Content saved."); render();
+}
+
 function resourceEditor(){
   if(!S.resEdit) return "";
   const d = S.resDraft; if(!d) return "";
+  if(S.editSession!==null && S.editSession!==undefined) return contentEditor();
   const isNew = S.resEdit==="new";
   return `<div class="modalwrap"><div class="mscrim" data-res-close></div>
     <div class="modal" role="dialog" aria-modal="true" aria-label="Edit resource" style="max-width:600px">
@@ -1096,11 +1326,14 @@ function resourceEditor(){
         <button class="x" data-res-close aria-label="Close">&times;</button>
       </div>
       <div class="mb">
-        <div class="bigthumb ${thumbLite(d.thumb)}" style="${thumbStyle(d.thumb)};color:#fff">${glyphFor(d.type)}</div>
+        <div class="bigthumb ${thumbLite(d.thumb,d.custom)}" style="${thumbStyle(d.thumb,d.custom)};color:#fff">${d.custom?"":glyphFor(d.type)}</div>
         <div class="field"><label>Thumbnail</label>
           <div class="thumbpick">
-            ${THUMBS.map((t,i)=>`<button data-thumb="${i}" style="background:${t.bg}" aria-pressed="${d.thumb===i}" aria-label="Thumbnail ${i+1}"></button>`).join("")}
+            ${THUMBS.map((t,i)=>`<button data-thumb="${i}" style="background:${t.bg}" aria-pressed="${!d.custom && d.thumb===i}" aria-label="Thumbnail ${i+1}"></button>`).join("")}
+            <button class="upload" data-upload aria-pressed="${!!d.custom}" title="Upload your own image">+</button>
           </div>
+          <input type="file" id="res-upload" accept="image/*" style="display:none">
+          ${d.custom?`<button class="mini" data-thumb-clear style="margin-top:9px;width:max-content">Remove uploaded image</button>`:`<span style="font-size:11.5px;color:var(--muted-2)">Pick a preset or upload your own cover image.</span>`}
         </div>
         <div class="field" id="f-restitle"><label for="res-title">Title</label><input id="res-title" value="${d.title.replace(/"/g,"&quot;")}" placeholder="Known: a 5 day reading plan"><span class="err">Give the resource a title.</span></div>
         <div class="field"><label for="res-type">Type</label><select id="res-type">${RES_TYPES.map(t=>`<option ${t===d.type?"selected":""}>${t}</option>`).join("")}</select></div>
@@ -1119,6 +1352,7 @@ function resourceEditor(){
                 <input class="sr" value="${(sn.r||"").replace(/"/g,"&quot;")}" placeholder="Passage" aria-label="Passage">
                 <input class="sm" type="number" min="1" style="width:62px" value="${sn.m}" aria-label="Minutes">
                 <span class="acts">
+                  <button class="iconbtn" data-sesscontent="${i}" aria-label="Write content" title="Write the article">&#9998;</button>
                   <button class="iconbtn" data-sessmove="${i}" data-dir="-1" aria-label="Move up">&#9650;</button>
                   <button class="iconbtn" data-sessmove="${i}" data-dir="1" aria-label="Move down">&#9660;</button>
                   <button class="iconbtn danger" data-sessdel="${i}" aria-label="Remove">&times;</button>
@@ -1323,7 +1557,7 @@ function memberGrow(){
       <div class="t" style="color:#fff">Known · Day 3</div>
       <div class="d" style="color:rgba(255,255,255,.7)">Psalm 139:1 to 12</div>
       <div class="prog"><i style="width:60%"></i></div>
-      <button class="mbtn" style="margin-top:14px">Open today's reading</button>
+      <button class="mbtn" style="margin-top:14px" data-read="r1|2">Open today's reading</button>
     </div>
     <div class="mcard">
       <div class="lbl">Bible</div>
@@ -1881,17 +2115,38 @@ function closeDrawer(){ $("drawer").classList.remove("on"); $("scrim").classList
 /* ============================ RENDER ============================ */
 function render(){
   setAccent();
-  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + kioskView() + giftModal() + reportPicker() + reportModal() + resourceEditor() + toastEl();
+  app.innerHTML = (S.view==="staff" ? staffView() : memberView()) + talkPanel() + supportModal() + elementModal() + chartModal() + kioskView() + giftModal() + reportPicker() + reportModal() + resourceEditor() + planView() + readerView() + toastEl();
   $("viewStaff").setAttribute("aria-selected", S.view==="staff");
   $("viewMember").setAttribute("aria-selected", S.view==="member");
   const q = $("q"); if(q && S.q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); }
 }
 
 document.addEventListener("click", e=>{
-  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],[data-res],[data-res-new],[data-res-close],[data-res-save],[data-res-del],[data-thumb],[data-sessadd],[data-sessdel],[data-sessmove],[data-gift-open],[data-close-gift],[data-save-gift],[data-report-open],[data-close-rp],[data-period],[data-run-report],[data-quickreport],[data-close-report],[data-export-report],[data-kiosk-open],[data-kiosk-exit],[data-kiosk-again],[data-kiosk-new],[data-kiosk-go],[data-pin],[data-kid],.toggle");
+  const t = e.target.closest("[data-tab],[data-stage],[data-person],[data-mtab],[data-close],[data-close-talk],[data-support],[data-close-support],[data-send-support],[data-color],[data-amt],[data-svc],[data-newsvc],[data-editel],[data-delel],[data-move],[data-save-el],[data-close-el],[data-copylast],[data-sendplan],[data-sendset],[data-sendreq],[data-addsong],[data-chart],[data-close-song],[data-res],[data-plan],[data-plan-close],[data-read],[data-read-jump],[data-read-done],[data-reader-close],[data-res-edit],[data-sesscontent],[data-content-back],[data-content-save],[data-upload],[data-thumb-clear],[data-res-new],[data-res-close],[data-res-save],[data-res-del],[data-thumb],[data-sessadd],[data-sessdel],[data-sessmove],[data-gift-open],[data-close-gift],[data-save-gift],[data-report-open],[data-close-rp],[data-period],[data-run-report],[data-quickreport],[data-close-report],[data-export-report],[data-kiosk-open],[data-kiosk-exit],[data-kiosk-again],[data-kiosk-new],[data-kiosk-go],[data-pin],[data-kid],.toggle");
   if(!t) return;
+  if(t.dataset.plan){ S.resView=t.dataset.plan; render(); return; }
+  if(t.hasAttribute("data-plan-close")){ S.resView=null; render(); return; }
+  if(t.dataset.read){ S.resRead=t.dataset.read; render(); return; }
+  if(t.hasAttribute("data-reader-close")){ S.resRead=null; render(); return; }
+  if(t.dataset.readJump!==undefined){
+    const [id] = S.resRead.split("|"); S.resRead = id+"|"+t.dataset.readJump; render(); return;
+  }
+  if(t.dataset.readDone!==undefined){
+    const [id, idx] = S.resRead.split("|"); const i=Number(idx);
+    const r = RESOURCES.find(x=>x.id===id); const done = doneSet(id);
+    if(!done.includes(i)) done.push(i);
+    if(i < r.sessions.length-1){ S.resRead = id+"|"+(i+1); }
+    else { S.resRead=null; S.resView=id; toast("Plan complete. Nice work."); }
+    render(); return;
+  }
+  if(t.dataset.resEdit){ const r=RESOURCES.find(x=>x.id===t.dataset.resEdit); S.resView=null; S.resEdit=r.id; S.resDraft=JSON.parse(JSON.stringify(r)); render(); return; }
+  if(t.dataset.sesscontent!==undefined){ resSync(); S.editSession=Number(t.dataset.sesscontent); render(); return; }
+  if(t.hasAttribute("data-content-back")){ S.editSession=null; render(); return; }
+  if(t.hasAttribute("data-content-save")){ saveContent(); return; }
+  if(t.hasAttribute("data-upload")){ resSync(); document.getElementById("res-upload").click(); return; }
+  if(t.hasAttribute("data-thumb-clear")){ resSync(); S.resDraft.custom=null; render(); return; }
   if(t.hasAttribute("data-res-new")){ S.resEdit="new"; S.resDraft={title:"",type:"Reading plan",status:"Draft",thumb:0,desc:"",sessions:[{t:"Day 1: ",r:"",m:8}]}; render(); document.getElementById("res-title")?.focus(); return; }
-  if(t.dataset.res){ const r=RESOURCES.find(x=>x.id===t.dataset.res); S.resEdit=r.id; S.resDraft=JSON.parse(JSON.stringify(r)); render(); return; }
+  if(t.dataset.res){ e.stopPropagation(); const r=RESOURCES.find(x=>x.id===t.dataset.res); S.resEdit=r.id; S.resDraft=JSON.parse(JSON.stringify(r)); render(); return; }
   if(t.hasAttribute("data-res-close")){ S.resEdit=null; S.resDraft=null; render(); return; }
   if(t.hasAttribute("data-res-save")){ saveResource(); return; }
   if(t.hasAttribute("data-res-del")){ RESOURCES=RESOURCES.filter(x=>x.id!==S.resEdit); S.resEdit=null; S.resDraft=null; toast("Resource deleted."); render(); return; }
@@ -1958,6 +2213,14 @@ document.addEventListener("click", e=>{
 });
 document.addEventListener("input", e=>{ if(e.target.id==="q"){ S.q=e.target.value; render(); } });
 document.addEventListener("change", e=>{
+  if(e.target.id==="res-upload"){
+    const f = e.target.files && e.target.files[0]; if(!f) return;
+    if(f.size > 4*1024*1024){ toast("That image is over 4 MB. Try a smaller one."); render(); return; }
+    const fr = new FileReader();
+    fr.onload = () => { resSync(); S.resDraft.custom = fr.result; toast("Cover image added."); render(); };
+    fr.readAsDataURL(f);
+    return;
+  }
   const k = e.target.closest("[data-key]");
   if(k){ const sg = svc().songs.find(x=>x.id===k.dataset.key); if(sg){ sg.key = k.value; toast(`${sg.title} moved to ${sg.key}. Charts follow the key.`); render(); } }
 });
@@ -1968,6 +2231,9 @@ document.addEventListener("keydown", e=>{
     if(S.report){S.report=null;render();return;}
     if(S.reportPick){S.reportPick=false;render();return;}
     if(S.gift){S.gift=false;S.giftSaved=null;render();return;}
+    if(S.resRead){S.resRead=null;render();return;}
+    if(S.resView){S.resView=null;render();return;}
+    if(S.editSession!==null&&S.editSession!==undefined){S.editSession=null;render();return;}
     if(S.resEdit){S.resEdit=null;S.resDraft=null;render();return;}
     if(S.editEl){S.editEl=null;render();return;}
     if(S.songModal){S.songModal=null;render();return;}
